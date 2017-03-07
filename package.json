@@ -1,0 +1,19 @@
+{
+  "name": "etisbew",
+  "version": "0.0.0",
+  "description": "Experimentation with the MEAN stack",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gvela024/etisbew.git"
+  },
+  "author": "Gabriel Velasco",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gvela024/etisbew/issues"
+  },
+  "homepage": "https://github.com/gvela024/etisbew#readme"
+}
