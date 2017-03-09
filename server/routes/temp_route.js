@@ -1,4 +1,4 @@
-var sensor = require('./models/sensor');
+var sensor = include('server/models/sensor');
 
 module.exports = function(app) {
 

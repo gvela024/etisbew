@@ -4,6 +4,7 @@
   "description": "Experimentation with the MEAN stack",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "npm test"
   },
   "repository": {
