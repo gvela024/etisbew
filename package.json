@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/gvela024/etisbew/issues"
   },
-  "homepage": "https://github.com/gvela024/etisbew#readme"
+  "homepage": "https://github.com/gvela024/etisbew#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "method-override": "^2.3.7",
+    "mongoose": "^4.8.6"
+  }
 }
