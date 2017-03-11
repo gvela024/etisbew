@@ -1,9 +1,9 @@
 global.base_dir = __dirname;
-global.abs_path = function(path) {
+global.absolute_path = function(path) {
   return base_dir + path;
 }
 global.include = function(file) {
-  return require(abs_path('/' + file));
+  return require(absolute_path('/' + file));
 }
 
 var express = require('express');
