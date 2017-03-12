@@ -1,4 +1,4 @@
-angular.module('SensorService', []).factory('Sensor', ['$http', function($http) {
+angular.module('sensor_service', []).factory('sensor', ['$http', function($http) {
   return {
     get: function() {
       return $http.get('/api/v0/sensors');
