@@ -4,7 +4,7 @@ angular.module(
   'etisbew', [
     'ngRoute',
     'appRoutes',
-    'main.controller',
-    'sensor.controller',
+    'main_controller',
+    'sensor_controller',
     'sensor_service'
   ]);

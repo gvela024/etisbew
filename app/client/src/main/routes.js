@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('main.routes', [])
+angular.module('main_routes', [])
   .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $routeProveder
       .when('/', {
         templateUrl: absolute_path('/client/src/main/home.html'),
-        controller: 'main.controller'
+        controller: 'main_controller'
       })
       .when('/sensors', {
         templateUrl: absolute_path('/client/src/sensor/home.html'),
-        controller: 'sensor.controller'
+        controller: 'sensor_controller'
       });
 
     $locationProvider.html5Mode(true);
