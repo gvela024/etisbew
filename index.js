@@ -20,7 +20,7 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('X-HTTP-Method-Override'));
 app.use(express.static(absolute_path('/app/client')));
-include('app/server/routes/temp_route')(app); // configure our routes
+include('app/server/routes/temp_route')(app);
 
 var port = process.env.PORT || 8080;
 app.listen(port);

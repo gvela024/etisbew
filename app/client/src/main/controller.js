@@ -1,6 +1,6 @@
 'use strict';
 
 angular.module('main_controller', [])
-  .controller('controller', function($scope) {
+  .controller('main_controller', function($scope) {
     $scope.tagline = 'To the moon and back!';
   })

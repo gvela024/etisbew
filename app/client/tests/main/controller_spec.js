@@ -5,7 +5,7 @@ describe('client.src.main.controller', function() {
   beforeEach(module('main_controller'));
   beforeEach(inject(function($rootScope, $controller) {
     scope = $rootScope.$new();
-    MainController = $controller('controller', { '$scope': scope });
+    MainController = $controller('main_controller', { '$scope': scope });
   }));
 
   it('should set the tagline to expected string', function() {

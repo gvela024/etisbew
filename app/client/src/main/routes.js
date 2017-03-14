@@ -8,11 +8,11 @@ angular.module('main_routes', ['ngRoute'])
       $routeProvider
         .when('/', {
           templateUrl: 'main/home.html',
-          controller: 'main_controller'
+          controller: 'main.controller'
         })
         .when('/sensors', {
           templateUrl: 'sensor/home.html',
-          controller: 'sensor_controller'
+          controller: 'sensor.controller'
         });
 
       $locationProvider.html5Mode(true);

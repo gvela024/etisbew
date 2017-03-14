@@ -5,7 +5,7 @@ describe('client.src.sensor.controller', function() {
   beforeEach(module('sensor_controller'));
   beforeEach(inject(function($rootScope, $controller) {
     scope = $rootScope.$new();
-    SensorController = $controller('controller', { '$scope': scope });
+    SensorController = $controller('sensor.controller', { '$scope': scope });
   }));
 
   it('should set the tagline to expected string', function() {
