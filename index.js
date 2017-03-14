@@ -12,15 +12,15 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var mongoose = require('mongoose');
 
-var db = require('./server/config/db');
+var db = include('app/server/config/db');
 mongoose.connect(db.url);
 
 app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('X-HTTP-Method-Override'));
-app.use(express.static(__dirname + '/client'));
-require('./server/routes/temp_route')(app); // configure our routes
+app.use(express.static(absolute_path('/app/client')));
+include('app/server/routes/temp_route')(app); // configure our routes
 
 var port = process.env.PORT || 8080;
 app.listen(port);

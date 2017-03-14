@@ -1,4 +1,4 @@
-var sensor = include('server/models/sensor');
+var sensor = include('app/server/models/sensor');
 
 module.exports = function(app) {
   app.get('/api/v0/sensors', function(req, res) {
@@ -9,6 +9,6 @@ module.exports = function(app) {
   });
 
   app.get('*', function(req, res) {
-    res.sendFile(absolute_path('/client/index.html'));
+    res.sendFile(absolute_path('/app/client/index.html'));
   });
 };
