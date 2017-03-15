@@ -9,6 +9,11 @@ module.exports = function(app) {
   });
 
   app.get('*', function(req, res) {
-    res.sendFile(absolute_path('/app/client/index.html'));
+    res.sendFile(absolute_path('/app/client/index.html'), function(error) {
+      if(error) {
+        console.log(error);
+        next(error);
+      }
+    });
   });
 };

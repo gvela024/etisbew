@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="etisbew" class="no-js">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <base href="/">
 
   <title>etisbew</title>
@@ -12,14 +12,10 @@
 </head>
 
 <body>
-  <div class="container">
-      <ul>
-        <li><a href="/">Home</a></li>
-      </ul>
-      <ul>
-        <li><a href="/sensors">Sensors</a></li>
-      </ul>
-  </div>
+  <ul>
+    <li><a href="/main">Home</a></li>
+    <li><a href="/sensors">Sensors</a></li>
+  </ul>
 
   <div ng-view></div>
 
@@ -28,9 +24,7 @@
 
   <script src="src/app.js"></script>
   <script src="src/main/controller.js"></script>
-  <script src="src/main/routes.js"></script>
   <script src="src/sensor/controller.js"></script>
-  <script src="src/sensor/service.js"></script>
 </body>
 
 </html>

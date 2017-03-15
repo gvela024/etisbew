@@ -1,14 +1,33 @@
 describe('client.src.sensor.controller', function() {
-  var SensorController;
-  var scope;
+  var rootScope;
+  var controller;
+  var location;
+  var route;
 
-  beforeEach(module('sensor_controller'));
-  beforeEach(inject(function($rootScope, $controller) {
-    scope = $rootScope.$new();
-    SensorController = $controller('sensor.controller', { '$scope': scope });
+  beforeEach(module('sensor'));
+  beforeEach(inject(function(_$location_, _$route_, _$rootScope_, _$controller_) {
+    location = _$location_;
+    rootScope = _$rootScope_;
+    controller = _$controller_;
+    route = _$route_;
   }));
 
   it('should set the tagline to expected string', function() {
-    expect(scope.tagline).toBe('Nothing beats a pocket protector!');
+    controller('sensor.controller', {
+      '$scope': rootScope
+    });
+    expect(rootScope.tagline).toBe('Nothing beats a pocket protector!');
+  });
+
+  it('should use the sensor controller on load of /sensors', function() {
+    location.path('/sensors');
+    rootScope.$digest();
+    expect(route.current.controller).toBe('sensor.controller');
+  });
+
+  it('should set the correct template URL on load of /sensors', function() {
+    location.path('/sensors');
+    rootScope.$digest();
+    expect(route.current.loadedTemplateUrl).toBe('/src/sensor/home.html');
   });
 });
