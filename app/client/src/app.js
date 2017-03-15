@@ -5,8 +5,7 @@ angular
     'etisbew', [
       'ngRoute',
       'main',
-      'sensor',
-      'sensor_service'
+      'sensor'
     ])
   .config([
     '$locationProvider',
