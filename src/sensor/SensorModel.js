@@ -1,21 +1,15 @@
 'use strict';
 
-const EventEmitter = require('events').EventEmitter;
+module.exports = (socket) => {
+  let sensors = [];
 
-module.exports = class SensorModel extends EventEmitter {
-  constructor(model) {
-    super();
+  socket.on('newSensorCreated', (sensor) => {
+    updateList(sensor);
+  });
 
-    this.sensors = [];
-
-    model.on('newSensorCreated', (sensor) => {
-      this._updateList(sensor);
-    });
-  }
-
-  _updateList(sensor) {
+  function updateList(sensor) {
     const timestamp = new Date();
-    this.sensors.push({
+    sensors.push({
       id: sensor.id,
       description: sensor.description,
       location: {
@@ -29,15 +23,16 @@ module.exports = class SensorModel extends EventEmitter {
       }]
     });
 
-    this._publishUpdate();
+    publishUpdate();
   }
 
-  _publishUpdate() {
-    console.log(this.sensors[0]);
-    this.emit('sensorListUpdated', this.sensors);
+  function publishUpdate() {
+    socket.emit('sensorListUpdated', sensors);
   }
 
-  getSensorList() {
-    return this.sensors;
-  }
+  return {
+    getSensorList: () => {
+      return sensors;
+    }
+  };
 }

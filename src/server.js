@@ -1,36 +1,28 @@
 'use strict';
 
 const express = require('express');
-const io = require('socket.io');
 const Server = require('http').Server;
+const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
-const SensorModel = require('./sensor/SensorModel');
 const path = require('path');
 
 module.exports = {
   start: () => {
     const app = express();
-    const server = {
-      http: Server(app)
-    };
+    const http = Server(app);
+    const io = socketIo(http);
 
-    app.use(bodyParser.urlencoded({
-      extended: false
+    app.use(express.static(path.join(__dirname, 'static'), {
+      extensions: ['html', 'js']
     }));
-    app.use
+    app.use(bodyParser.json());
 
-    app.get('/', function(request, response) {
-      response.sendFile(__dirname + '/index.html');
+    io.on('connection', function(socket) {
+      require('./sensor/SensorModel')(socket);
     });
-    app.use(express.static(__dirname + '/sensor'));
-    app.use(express.static(__dirname + '/build'));
-    const core = {
-      io: io(server.http)
-    };
-    const sensorModel = new SensorModel(core.io.of('/sensors'));
 
-    const port = process.env.PORT || 3000;
-    app.listen(port, function() {
+    const port = process.env.PORT || 3001;
+    http.listen(port, function() {
       console.log('Running on ' + port);
     });
   }

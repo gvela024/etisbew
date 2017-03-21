@@ -61,9 +61,9 @@ gulp.task('lint', () => {
 });
 
 gulp.task('build', () => {
-  const entryFile = './src/index.jsx';
+  const entryFile = './src/sensor/SensorsView.js';
   const bundler = browserify(entryFile, {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js']
   });
 
   bundler.transform(babelify.configure({
@@ -72,13 +72,15 @@ gulp.task('build', () => {
 
   const stream = bundler.bundle();
   stream.on('error', (error) => {
-    console.error(error.toString());
+    console.error(error.message);
+    console.error(error.codeFrame);
+    throw new Error("See above...");
   });
 
   stream
     .pipe(vinyl_source_stream(entryFile))
-    .pipe(rename('bundel.js'))
-    .pipe(gulp.dest('src/build/'));
+    .pipe(rename('bundle.js'))
+    .pipe(gulp.dest('src/static/'));
 });
 
 gulp.task('default', () => {
