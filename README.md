@@ -1,2 +1,2 @@
 # etisbew
-Experimenting with the MEAN stack.
+Experimenting with the ~~MEAN~~ MERN stack.
