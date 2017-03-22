@@ -1,18 +1,13 @@
 const React = require('react');
-const ReactDom = require('react-dom');
-const HashRouter = require('react-router-dom').HashRouter;
-const Route = require('react-router-dom').Route;
-const Redirect = require('react-router-dom').Redirect;
 const Button = require('react-bootstrap/lib/Button');
 const Panel = require('react-bootstrap/lib/Panel');
-const InputGroup = require('react-bootstrap/lib/InputGroup');
 const FormGroup = require('react-bootstrap/lib/FormGroup');
 const FormControl = require('react-bootstrap/lib/FormControl');
 const ControlLabel = require('react-bootstrap/lib/ControlLabel');
 
 const socket = io();
 
-class Temp extends React.Component {
+class CreateModifySensorView extends React.Component {
   constructor(props) {
     super(props);
 
@@ -22,7 +17,6 @@ class Temp extends React.Component {
   render() {
     return (
       <div>
-        <h1>Sensors</h1>
         <Panel header='Create Sensor'>
           <FormGroup>
             <ControlLabel>ID</ControlLabel>
@@ -62,15 +56,4 @@ class Temp extends React.Component {
   }
 }
 
-ReactDom.render(
-  (
-    <HashRouter>
-      <div>
-        <Route path="/temp" component={ Temp } />
-        <Redirect from="/" to="/temp" />
-      </div>
-    </HashRouter>
-  ),
-
-  document.getElementById('main')
-);
+module.exports = CreateModifySensorView;

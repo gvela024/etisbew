@@ -61,9 +61,9 @@ gulp.task('lint', () => {
 });
 
 gulp.task('build', () => {
-  const entryFile = './src/sensor/SensorsView.js';
+  const entryFile = './src/main/MainView.jsx';
   const bundler = browserify(entryFile, {
-    extensions: ['.js']
+    extensions: ['.js', '.jsx']
   });
 
   bundler.transform(babelify.configure({
@@ -74,7 +74,7 @@ gulp.task('build', () => {
   stream.on('error', (error) => {
     console.error(error.message);
     console.error(error.codeFrame);
-    throw new Error("See above...");
+    process.exit(1);
   });
 
   stream

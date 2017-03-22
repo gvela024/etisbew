@@ -13,7 +13,7 @@ module.exports = {
     const io = socketIo(http);
 
     app.use(express.static(path.join(__dirname, 'static'), {
-      extensions: ['html', 'js']
+      extensions: ['html', 'js', 'jsx']
     }));
     app.use(bodyParser.json());
 
