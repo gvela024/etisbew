@@ -7,6 +7,10 @@ module.exports = (socket) => {
     updateList(sensor);
   });
 
+  socket.on('requestSensorList', () => {
+    socket.emit('returningSensorList', sensors)
+  })
+
   function updateList(sensor) {
     const timestamp = new Date();
     sensors.push({
@@ -29,10 +33,4 @@ module.exports = (socket) => {
   function publishUpdate() {
     socket.emit('sensorListUpdated', sensors);
   }
-
-  return {
-    getSensorList: () => {
-      return sensors;
-    }
-  };
 }

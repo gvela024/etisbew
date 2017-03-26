@@ -1,13 +1,13 @@
 'use strict';
 
-describe('app.frontend.src.sensor.create', () => {
+describe('app.frontend.src.sensor.Model', () => {
   const EventEmitter = require('events').EventEmitter;
-  const SensorModel = require('../../src/sensor/SensorModel')
+  const SensorModel = require('../../src/sensor/Model');
 
-  let model;
+  let socket;
   let sensorModel;
   let sensorsDouble;
-  let sensorListDouble = (sensors) => {
+  let sensorListDoubleUpdate = (sensors) => {
     sensorsDouble = sensors
   };
 
@@ -47,13 +47,13 @@ describe('app.frontend.src.sensor.create', () => {
   }]
 
   beforeEach(() => {
-    model = new EventEmitter();
-    sensorModel = new SensorModel(model);
-    sensorModel.on('sensorListUpdated', sensorListDouble);
+    socket = new EventEmitter();
+    sensorModel = SensorModel(socket);
+    socket.on('sensorListUpdated', sensorListDoubleUpdate);
   });
 
   const whenASensorIsCreated = (sensor) => {
-    model.emit('newSensorCreated', Object.freeze(sensor));
+    socket.emit('newSensorCreated', Object.freeze(sensor));
   };
 
   const theSensorShouldMatch = (start, end, sensor, indexOfExpected) => {
@@ -76,12 +76,15 @@ describe('app.frontend.src.sensor.create', () => {
     });
   };
 
-  const shouldBeAbleToReturnTheListOfSensorsThatWereAdded = (start, end) => {
-    let actualSensorList = sensorModel.getSensorList();
-
-    actualSensorList.forEach((sensor, index) => {
-      theSensorShouldMatch(start, end, sensor, index);
+  const shouldBeAbleToReturnTheListOfSensorsThatWereAdded = (start, end, done) => {
+    socket.on('returningSensorList', (actualSensorList) => {
+      actualSensorList.forEach((sensor, index) => {
+        theSensorShouldMatch(start, end, sensor, index);
+      });
+      done();
     });
+
+    socket.emit('requestSensorList');
   };
 
   it('should update the list of sensors when a new sensor is created', () => {
@@ -105,11 +108,11 @@ describe('app.frontend.src.sensor.create', () => {
     theSensorShouldBeInTheList(start, end, sensor);
   });
 
-  it('should return a list of sensors', () => {
+  it('should return a list of sensors', (done) => {
     let start = new Date();
     givenThatSomeSensorsHaveBeenAdded();
     let end = new Date();
 
-    shouldBeAbleToReturnTheListOfSensorsThatWereAdded(start, end);
+    shouldBeAbleToReturnTheListOfSensorsThatWereAdded(start, end, done);
   });
 });

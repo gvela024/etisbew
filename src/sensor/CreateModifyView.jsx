@@ -11,20 +11,61 @@ class CreateModifySensorView extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      formsAreValid: false,
+      id: undefined,
+      description: undefined,
+      latitude: undefined,
+      longitude: undefined,
+      temperature: undefined,
+      relativeHumidity: undefined
+    }
+
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleCreate = this.handleCreate.bind(this);
+  }
+
+  hasValue(value) {
+    console.log('hasValue');
+    if (value === undefined) {
+      return null
+    } else {
+      if (value.length > 0) {
+        return 'success';
+      } else {
+        return 'error';
+      }
+    }
+  }
+
+  validateThatId() {
+    console.log('validateThatId');
+    return this.hasValue(this.state.id);
+  }
+
+  validateThatDescription() {
+    console.log('validateThatDescription');
+    return this.hasValue(this.state.description);
+  }
+
+  handleInputChange(event) {
+    console.log('handleInputChange: ', event.target.name);
+    this.setState({
+      [event.target.name]: event.target.value
+    })
   }
 
   render() {
     return (
       <div>
         <Panel header='Create Sensor'>
-          <FormGroup>
+          <FormGroup validationState={this.validateThatId()}>
             <ControlLabel>ID</ControlLabel>
-            <FormControl type='number' placeholder='1234'/>
+            <FormControl name='id' type='number' placeholder='1234' onChange={this.handleInputChange}/>
           </FormGroup>
-          <FormGroup>
+          <FormGroup validationState={this.validateThatDescription()}>
             <ControlLabel>Description</ControlLabel>
-            <FormControl type='text' placeholder='1234'/>
+            <FormControl name='description' type='text' placeholder='Some description' onChange={this.handleInputChange}/>
           </FormGroup>
           <FormGroup>
             <ControlLabel>Latitude</ControlLabel>
@@ -42,7 +83,7 @@ class CreateModifySensorView extends React.Component {
             <ControlLabel>Relative Humidity</ControlLabel>
             <FormControl type='number' placeholder='12'/>
           </FormGroup>
-          <Button bsStyle="primary" onClick={ this.handleCreate }>Create</Button>
+          <Button bsStyle="primary" onClick={this.handleCreate}>Create</Button>
         </Panel>
       </div>
     )

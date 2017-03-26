@@ -18,7 +18,7 @@ module.exports = {
     app.use(bodyParser.json());
 
     io.on('connection', function(socket) {
-      require('./sensor/SensorModel')(socket);
+      require('./sensor/Model')(socket);
     });
 
     const port = process.env.PORT || 3001;

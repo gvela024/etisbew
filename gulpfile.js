@@ -10,6 +10,7 @@ const browserify = require('browserify');
 const babelify = require('babelify');
 const vinyl_source_stream = require('vinyl-source-stream');
 const rename = require('gulp-rename');
+const fs = require('fs');
 
 const source = ['./src/**/*.js'];
 const tests = ['./spec/**/*_spec.js'];
@@ -32,12 +33,21 @@ gulp.task('require-all', ['setup-istanbul'], () => {
     .pipe(tap((f) => require(f.path)));
 });
 
-gulp.task('test', ['require-all'], () => {
+gulp.task('remove-files', () => {
+  fs.unlink('./src/static/bundle.js',(error) =>{
+    if(error && !error.code == 'ENOENT') {
+      console.log(error);
+    }
+  });
+});
+
+gulp.task('test', ['remove-files', 'require-all'], () => {
   console.log('Running tests...');
   return gulp.src(tests)
     .pipe(_jasmine({
       config: jasmineConfig,
-      includeStackTrace: true
+      includeStackTrace: true,
+      timeout: 1000
     }))
     .pipe(istanbul.writeReports())
     .on('end', () => {
@@ -61,7 +71,7 @@ gulp.task('lint', () => {
 });
 
 gulp.task('build', () => {
-  const entryFile = './src/main/MainView.jsx';
+  const entryFile = './src/main/View.jsx';
   const bundler = browserify(entryFile, {
     extensions: ['.js', '.jsx']
   });
