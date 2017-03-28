@@ -42,13 +42,16 @@ describe('src.server', () => {
     join: () => {}
   }, 'path');
 
+  const SensorModel = mach.mockFunction('SensorModel');
+
   const server = proxyquire(
     '../src/server.js', {
       'express': express,
       'http': http,
       'socket.io': socketIo,
       'body-parser': bodyParser,
-      'path': pathMock
+      'path': pathMock,
+      './sensor/Model': SensorModel
     });
 
   it('should start the server', (done) => {
@@ -60,7 +63,7 @@ describe('src.server', () => {
       .then(app.use.shouldBeCalledWith('a bunch of files'))
       .then(bodyParser.json.shouldBeCalled().andWillReturn('some configuration'))
       .then(app.use.shouldBeCalledWith('some configuration'))
-      .then(io.on.shouldBeCalledWith('connection', mach.any))
+      .then(SensorModel.shouldBeCalledWith(mach.same(io)))
       .then(Server.listen.shouldBeCalledWith(port, mach.any))
       .when(server.start);
     done();

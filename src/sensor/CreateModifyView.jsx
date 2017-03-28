@@ -5,20 +5,20 @@ const FormGroup = require('react-bootstrap/lib/FormGroup');
 const FormControl = require('react-bootstrap/lib/FormControl');
 const ControlLabel = require('react-bootstrap/lib/ControlLabel');
 
-const socket = io();
+const numberOfValidForms = 6;
 
 class CreateModifySensorView extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      formsAreValid: false,
-      id: undefined,
-      description: undefined,
-      latitude: undefined,
-      longitude: undefined,
-      temperature: undefined,
-      relativeHumidity: undefined
+      validFormCount: 0,
+      id: 0,
+      description: '',
+      latitude: 0,
+      longitude: 0,
+      temperature: 0,
+      relativeHumidity: 0
     }
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -26,30 +26,44 @@ class CreateModifySensorView extends React.Component {
   }
 
   hasValue(value) {
-    console.log('hasValue');
-    if (value === undefined) {
-      return null
+    if (value.length > 0) {
+      return 'success';
     } else {
-      if (value.length > 0) {
-        return 'success';
-      } else {
-        return 'error';
-      }
+      return 'error';
     }
   }
 
-  validateThatId() {
-    console.log('validateThatId');
+  validateId() {
     return this.hasValue(this.state.id);
   }
 
-  validateThatDescription() {
-    console.log('validateThatDescription');
+  validateDescription() {
     return this.hasValue(this.state.description);
   }
 
+  validateLatitude() {
+    return this.hasValue(this.state.latitude);
+  }
+
+  validateLongitude() {
+    return this.hasValue(this.state.longitude);
+  }
+
+  validateTemperature() {
+    return this.hasValue(this.state.temperature);
+  }
+
+  validateRelativeHumidity() {
+    return this.hasValue(this.state.relativeHumidity);
+  }
+
+  ifAtLeastOneFormIsEmpty() {
+    return this.state.id.length > 0 && this.state.description.length > 0 && this.state.latitude.length > 0 && this.state.longitude.length > 0 && this.state.temperature.length > 0 && this.state.relativeHumidity.length > 0
+      ? false
+      : true;
+  }
+
   handleInputChange(event) {
-    console.log('handleInputChange: ', event.target.name);
     this.setState({
       [event.target.name]: event.target.value
     })
@@ -59,31 +73,31 @@ class CreateModifySensorView extends React.Component {
     return (
       <div>
         <Panel header='Create Sensor'>
-          <FormGroup validationState={this.validateThatId()}>
+          <FormGroup validationState={this.validateId()}>
             <ControlLabel>ID</ControlLabel>
-            <FormControl name='id' type='number' placeholder='1234' onChange={this.handleInputChange}/>
+            <FormControl name='id' type='text' placeholder='12ab' onChange={this.handleInputChange}/>
           </FormGroup>
-          <FormGroup validationState={this.validateThatDescription()}>
+          <FormGroup validationState={this.validateDescription()}>
             <ControlLabel>Description</ControlLabel>
             <FormControl name='description' type='text' placeholder='Some description' onChange={this.handleInputChange}/>
           </FormGroup>
-          <FormGroup>
+          <FormGroup validationState={this.validateLatitude()}>
             <ControlLabel>Latitude</ControlLabel>
-            <FormControl type='number' placeholder='12.34'/>
+            <FormControl name='latitude' type='text' placeholder='12.34' onChange={this.handleInputChange}/>
           </FormGroup>
-          <FormGroup>
+          <FormGroup validationState={this.validateLongitude()}>
             <ControlLabel>Longitude</ControlLabel>
-            <FormControl type='number' placeholder='12.34'/>
+            <FormControl name='longitude' type='text' placeholder='12.34' onChange={this.handleInputChange}/>
           </FormGroup>
-          <FormGroup>
+          <FormGroup validationState={this.validateTemperature()}>
             <ControlLabel>Temperature</ControlLabel>
-            <FormControl type='number' placeholder='34'/>
+            <FormControl name='temperature' type='text' placeholder='34' onChange={this.handleInputChange}/>
           </FormGroup>
-          <FormGroup>
+          <FormGroup validationState={this.validateRelativeHumidity()}>
             <ControlLabel>Relative Humidity</ControlLabel>
-            <FormControl type='number' placeholder='12'/>
+            <FormControl name='relativeHumidity' type='text' placeholder='12' onChange={this.handleInputChange}/>
           </FormGroup>
-          <Button bsStyle="primary" onClick={this.handleCreate}>Create</Button>
+          <Button bsStyle="primary" onClick={this.handleCreate} disabled={this.ifAtLeastOneFormIsEmpty()}>Create</Button>
         </Panel>
       </div>
     )
@@ -91,9 +105,14 @@ class CreateModifySensorView extends React.Component {
 
   handleCreate(event) {
     event.preventDefault();
-    console.log('The button was clicked');
-    socket.emit('newSensorCreated', 1);
-    console.log('sent the event');
+    this.props.socket.emit('newSensorCreated', {
+      id: this.state.id,
+      description: this.state.description,
+      latitude: this.state.latitude,
+      longitude: this.state.longitude,
+      temperature: this.state.temperature,
+      relativeHumidity: this.state.relativeHumidity
+    });
   }
 }
 

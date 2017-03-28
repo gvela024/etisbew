@@ -1,36 +1,38 @@
 'use strict';
 
-module.exports = (socket) => {
+module.exports = (io) => {
   let sensors = [];
 
-  socket.on('newSensorCreated', (sensor) => {
-    updateList(sensor);
-  });
+  io.on('connect', (socket) => {
+    socket.on('newSensorCreated', (sensor) => {
+      updateList(sensor, socket);
+    });
 
-  socket.on('requestSensorList', () => {
-    socket.emit('returningSensorList', sensors)
+    socket.on('requestSensorList', () => {
+      socket.emit('returningSensorList', sensors)
+    });
   })
 
-  function updateList(sensor) {
+  const updateList = (sensor, socket) => {
     const timestamp = new Date();
     sensors.push({
       id: sensor.id,
       description: sensor.description,
       location: {
-        latitude: sensor.location.latitude,
-        longitude: sensor.location.longitude
+        latitude: sensor.latitude,
+        longitude: sensor.longitude
       },
       readings: [{
-        temperature: sensor.readings[0].temperature,
-        relativeHumidity: sensor.readings[0].relativeHumidity,
+        temperature: sensor.temperature,
+        relativeHumidity: sensor.relativeHumidity,
         timestamp: timestamp
       }]
     });
 
-    publishUpdate();
+    publishUpdate(socket);
   }
 
-  function publishUpdate() {
+  const publishUpdate = (socket) => {
     socket.emit('sensorListUpdated', sensors);
   }
 }

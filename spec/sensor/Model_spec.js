@@ -4,8 +4,7 @@ describe('app.frontend.src.sensor.Model', () => {
   const EventEmitter = require('events').EventEmitter;
   const SensorModel = require('../../src/sensor/Model');
 
-  let socket;
-  let sensorModel;
+  let io;
   let sensorsDouble;
   let sensorListDoubleUpdate = (sensors) => {
     sensorsDouble = sensors
@@ -14,46 +13,35 @@ describe('app.frontend.src.sensor.Model', () => {
   const someSensors = [{
     id: 1234,
     description: 'the description',
-    location: {
-      latitude: 12.34,
-      longitude: 12.34
-    },
-    readings: [{
-      temperature: 1,
-      relativeHumidity: 2
-    }]
+    latitude: 12.34,
+    longitude: 12.34,
+    temperature: 1,
+    relativeHumidity: 2
   }, {
     id: 5678,
     description: 'the other description',
-    location: {
-      latitude: 56.34,
-      longitude: 23.34
-    },
-    readings: [{
-      temperature: 12,
-      relativeHumidity: 23
-    }]
+    latitude: 56.34,
+    longitude: 23.34,
+    temperature: 12,
+    relativeHumidity: 23
   }, {
     id: 3,
     description: 'the final description',
-    location: {
-      latitude: 12.43,
-      longitude: 12.21
-    },
-    readings: [{
-      temperature: 71,
-      relativeHumidity: 62
-    }]
+    latitude: 12.43,
+    longitude: 12.21,
+    temperature: 71,
+    relativeHumidity: 62
   }]
 
   beforeEach(() => {
-    socket = new EventEmitter();
-    sensorModel = SensorModel(socket);
-    socket.on('sensorListUpdated', sensorListDoubleUpdate);
+    io = new EventEmitter();
+    SensorModel(io);
+    io.on('sensorListUpdated', sensorListDoubleUpdate);
   });
 
   const whenASensorIsCreated = (sensor) => {
-    socket.emit('newSensorCreated', Object.freeze(sensor));
+    console.log('whenASensorIsCreated');
+    io.emit('newSensorCreated', Object.freeze(sensor));
   };
 
   const theSensorShouldMatch = (start, end, sensor, indexOfExpected) => {
@@ -77,41 +65,51 @@ describe('app.frontend.src.sensor.Model', () => {
   };
 
   const shouldBeAbleToReturnTheListOfSensorsThatWereAdded = (start, end, done) => {
-    socket.on('returningSensorList', (actualSensorList) => {
+    io.on('returningSensorList', (actualSensorList) => {
       actualSensorList.forEach((sensor, index) => {
         theSensorShouldMatch(start, end, sensor, index);
       });
       done();
     });
 
-    socket.emit('requestSensorList');
+    io.emit('requestSensorList');
   };
 
   it('should update the list of sensors when a new sensor is created', () => {
-    let sensor = {
+    const newSensor = {
       id: 1234,
       description: 'the description',
-      location: {
-        latitude: 12.34,
-        longitude: 12.34
-      },
-      readings: [{
-        temperature: 1,
-        relativeHumidity: 2,
-      }]
+      latitude: 12.34,
+      longitude: 12.34,
+      temperature: 1,
+      relativeHumidity: 2
     };
 
-    let start = new Date();
-    whenASensorIsCreated(sensor);
-    let end = new Date();
+    const start = new Date();
+    whenASensorIsCreated(newSensor);
+    const end = new Date();
 
-    theSensorShouldBeInTheList(start, end, sensor);
+    const expectedSensor = {
+      id: newSensor.id,
+      description: newSensor.description,
+      location: {
+        latitude: newSensor.latitude,
+        longitude: newSensor.longitude
+      },
+      readings: [{
+        temperature: newSensor.temperature,
+        relativeHumidity: newSensor.relativeHumidity,
+      }]
+    };
+    theSensorShouldBeInTheList(start, end, expectedSensor);
   });
 
   it('should return a list of sensors', (done) => {
-    let start = new Date();
+    const start = new Date();
+    console.log('start');
     givenThatSomeSensorsHaveBeenAdded();
-    let end = new Date();
+    console.log('end');
+    const end = new Date();
 
     shouldBeAbleToReturnTheListOfSensorsThatWereAdded(start, end, done);
   });

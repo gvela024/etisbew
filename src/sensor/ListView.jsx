@@ -2,16 +2,18 @@ const React = require('react');
 const Link = require('react-router-dom').Link;
 const Table = require('react-bootstrap/lib/Table');
 
-const socket = io();
-
 class SensorRow extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     return (
       <tr>
         <td>{this.props.sensor.id}</td>
         <td>{this.props.sensor.description}</td>
         <td>{this.props.sensor.location.latitude}, {this.props.sensors.location.longitude}</td>
-        <td> - todo status</td>
+        <td>todo status</td>
       </tr>
     )
   }
@@ -23,18 +25,22 @@ class SensorsListView extends React.Component {
 
     this.state = { sensors: [] };
 
-    socket.on('returningSensorList', (sensors) => {
+    this.props.socket.on('returningSensorList', (sensors) => {
+      this.setState({ sensors: sensors});
+    });
+
+    this.props.socket.on('sensorListUpdated', (sensors) => {
       this.setState({ sensors: sensors});
     });
   }
 
   componentDidMount() {
-    socket.emit('requestSensorList');
+    this.props.socket.emit('requestSensorList');
   }
 
   render() {
-      let sensorRows = this.state.sensors.map(function(sensor) {
-        return <SensorRow key={ sensor._id } sensor={ sensor } />
+      const sensorRows = this.state.sensors.map(function(sensor) {
+        return <SensorRow key={ sensor.id } sensor={ sensor } />
       });
 
       return (

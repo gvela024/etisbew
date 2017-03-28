@@ -5,6 +5,7 @@ const Server = require('http').Server;
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
 const path = require('path');
+const SensorModel = require('./sensor/Model');
 
 module.exports = {
   start: () => {
@@ -17,13 +18,16 @@ module.exports = {
     }));
     app.use(bodyParser.json());
 
-    io.on('connection', function(socket) {
-      require('./sensor/Model')(socket);
-    });
+    SensorModel(io);
+
+    // io.on('connect', () => {
+    //   io.emit('testing');
+    // });
 
     const port = process.env.PORT || 3001;
     http.listen(port, function() {
       console.log('Running on ' + port);
+      // io.emit('testing');
     });
   }
 };
