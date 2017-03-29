@@ -8,11 +8,12 @@ class SensorRow extends React.Component {
   }
 
   render() {
+    console.log(this.props.sensor.location);
     return (
       <tr>
         <td>{this.props.sensor.id}</td>
         <td>{this.props.sensor.description}</td>
-        <td>{this.props.sensor.location.latitude}, {this.props.sensors.location.longitude}</td>
+        <td>{this.props.sensor.location.latitude}, {this.props.sensor.location.longitude}</td>
         <td>todo status</td>
       </tr>
     )
