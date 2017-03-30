@@ -5,7 +5,7 @@ module.exports = (io) => {
 
   io.on('connect', (socket) => {
     socket.on('newSensorCreated', (sensor) => {
-      updateList(sensor, socket);
+      updateList(sensor);
     });
 
     socket.on('requestSensorList', () => {
@@ -13,7 +13,7 @@ module.exports = (io) => {
     });
   })
 
-  const updateList = (sensor, socket) => {
+  const updateList = (sensor) => {
     const timestamp = new Date();
     sensors.push({
       id: sensor.id,
@@ -29,10 +29,10 @@ module.exports = (io) => {
       }]
     });
 
-    publishUpdate(socket);
+    publishUpdate();
   }
 
-  const publishUpdate = (socket) => {
-    socket.emit('sensorListUpdated', sensors);
+  const publishUpdate = () => {
+    io.emit('sensorListUpdated', sensors);
   }
 }

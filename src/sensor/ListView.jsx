@@ -8,7 +8,6 @@ class SensorRow extends React.Component {
   }
 
   render() {
-    console.log(this.props.sensor.location);
     return (
       <tr>
         <td>{this.props.sensor.id}</td>

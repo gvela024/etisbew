@@ -1,10 +1,13 @@
 'use strict';
 
 describe('app.frontend.src.sensor.Model', () => {
+  const mach = require('mach.js');
   const EventEmitter = require('events').EventEmitter;
   const SensorModel = require('../../src/sensor/Model');
 
   let io;
+  let socket;
+  let anotherSocket;
   let sensorsDouble;
   let sensorListDoubleUpdate = (sensors) => {
     sensorsDouble = sensors
@@ -31,17 +34,18 @@ describe('app.frontend.src.sensor.Model', () => {
     longitude: 12.21,
     temperature: 71,
     relativeHumidity: 62
-  }]
+  }];
 
   beforeEach(() => {
     io = new EventEmitter();
+    socket = new EventEmitter();
+    anotherSocket = new EventEmitter();
     SensorModel(io);
     io.on('sensorListUpdated', sensorListDoubleUpdate);
   });
 
   const whenASensorIsCreated = (sensor) => {
-    console.log('whenASensorIsCreated');
-    io.emit('newSensorCreated', Object.freeze(sensor));
+    socket.emit('newSensorCreated', Object.freeze(sensor));
   };
 
   const theSensorShouldMatch = (start, end, sensor, indexOfExpected) => {
@@ -65,15 +69,19 @@ describe('app.frontend.src.sensor.Model', () => {
   };
 
   const shouldBeAbleToReturnTheListOfSensorsThatWereAdded = (start, end, done) => {
-    io.on('returningSensorList', (actualSensorList) => {
+    socket.on('returningSensorList', (actualSensorList) => {
       actualSensorList.forEach((sensor, index) => {
         theSensorShouldMatch(start, end, sensor, index);
       });
       done();
     });
 
-    io.emit('requestSensorList');
+    socket.emit('requestSensorList');
   };
+
+  const givenThatAClientHasConnected = () => {
+    io.emit('connect', socket);
+  }
 
   it('should update the list of sensors when a new sensor is created', () => {
     const newSensor = {
@@ -84,6 +92,8 @@ describe('app.frontend.src.sensor.Model', () => {
       temperature: 1,
       relativeHumidity: 2
     };
+
+    givenThatAClientHasConnected();
 
     const start = new Date();
     whenASensorIsCreated(newSensor);
@@ -105,12 +115,15 @@ describe('app.frontend.src.sensor.Model', () => {
   });
 
   it('should return a list of sensors', (done) => {
+    givenThatAClientHasConnected();
     const start = new Date();
-    console.log('start');
     givenThatSomeSensorsHaveBeenAdded();
-    console.log('end');
     const end = new Date();
 
     shouldBeAbleToReturnTheListOfSensorsThatWereAdded(start, end, done);
+  });
+
+  xit('should not lose the list of sensors when another socket connects', () => {
+    // I don't know if this is a reasonable test because it is testing socket.io and I don't think that I want ot do that.
   });
 });
