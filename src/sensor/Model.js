@@ -1,38 +1,56 @@
 'use strict';
 
-module.exports = (io) => {
-  let sensors = [];
+module.exports = (io, mongoose) => {
+  const sensorSchema = mongoose.Schema({
+    id: Number,
+    description: String,
+    location: {
+      latitude: Number,
+      longitude: Number
+    },
+    readings: [{
+      temperature: Number,
+      relativeHumidity: Number,
+      timestamp: Date
+    }]
+  });
+  const SensorModel = mongoose.model('Sensor', sensorSchema);
 
   io.on('connect', (socket) => {
-    socket.on('newSensorCreated', (sensor) => {
-      updateList(sensor);
+    socket.on('newSensorCreated', (newSensor) => {
+      updateList(newSensor);
     });
 
     socket.on('requestSensorList', () => {
-      socket.emit('returningSensorList', sensors)
+      SensorModel.find((error, sensors) => {
+        socket.emit('returningSensorList', sensors)
+      });
     });
-  })
+  });
 
-  const updateList = (sensor) => {
+  const updateList = (newSensor) => {
     const timestamp = new Date();
-    sensors.push({
-      id: sensor.id,
-      description: sensor.description,
+    const sensor = new SensorModel({
+      id: newSensor.id,
+      description: newSensor.description,
       location: {
-        latitude: sensor.latitude,
-        longitude: sensor.longitude
+        latitude: newSensor.latitude,
+        longitude: newSensor.longitude
       },
       readings: [{
-        temperature: sensor.temperature,
-        relativeHumidity: sensor.relativeHumidity,
+        temperature: newSensor.temperature,
+        relativeHumidity: newSensor.relativeHumidity,
         timestamp: timestamp
       }]
     });
-
-    publishUpdate();
+    sensor.save((error, _) => {
+      publishUpdate();
+    });
   }
 
   const publishUpdate = () => {
-    io.emit('sensorListUpdated', sensors);
+    SensorModel.find((error, sensors) => {
+      io.emit('sensorListUpdated', sensors);
+    });
   }
 }

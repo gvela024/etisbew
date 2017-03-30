@@ -3,7 +3,6 @@
 describe('src.server', () => {
   const proxyquire = require('proxyquire');
   const mach = require('mach.js');
-  const path = require('path');
 
   const app = mach.mockObject({
     get: () => {},
@@ -38,11 +37,25 @@ describe('src.server', () => {
     json: () => {}
   }, 'bodyParser');
 
-  const pathMock = mach.mockObject({
+  const path = mach.mockObject({
     join: () => {}
   }, 'path');
 
   const SensorModel = mach.mockFunction('SensorModel');
+
+  const mongooseUtils = {
+    on: mach.mockFunction('mongoose utils "on"'),
+    once: (status, response) => {
+      expect(status).toEqual('open');
+      response();
+    }
+  };
+
+  const mongoose = mach.mockObject({
+    Promise: undefined,
+    connect: () => {},
+    connection: mongooseUtils
+  }, 'mongoose');
 
   const server = proxyquire(
     '../src/server.js', {
@@ -50,20 +63,24 @@ describe('src.server', () => {
       'http': http,
       'socket.io': socketIo,
       'body-parser': bodyParser,
-      'path': pathMock,
+      'path': path,
+      'mongoose': mongoose,
       './sensor/Model': SensorModel
     });
 
   it('should start the server', (done) => {
     const port = 3001;
-    pathMock.join.shouldBeCalledWith(__dirname.replace('/spec', '/src'), 'static').andWillReturn('/some/path')
+    const localDatabaseUri = 'mongodb://localhost/test';
+    path.join.shouldBeCalledWith(__dirname.replace('/spec', '/src'), 'static').andWillReturn('/some/path')
       .then(express.static.shouldBeCalledWith('/some/path', mach.same({
         extensions: ['html', 'js', 'jsx']
       })).andWillReturn('a bunch of files'))
       .then(app.use.shouldBeCalledWith('a bunch of files'))
       .then(bodyParser.json.shouldBeCalled().andWillReturn('some configuration'))
       .then(app.use.shouldBeCalledWith('some configuration'))
-      .then(SensorModel.shouldBeCalledWith(mach.same(io)))
+      .then(mongoose.connect.shouldBeCalledWith(localDatabaseUri))
+      .then(mongooseUtils.on.shouldBeCalledWith('error', mach.any))
+      .then(SensorModel.shouldBeCalledWith(mach.same(io), mach.same(mongoose)))
       .then(Server.listen.shouldBeCalledWith(port, mach.any))
       .when(server.start);
     done();

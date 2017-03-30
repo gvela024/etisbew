@@ -5,6 +5,8 @@ const Server = require('http').Server;
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
 const path = require('path');
+const mongoose = require('mongoose');
+
 const SensorModel = require('./sensor/Model');
 
 module.exports = {
@@ -18,16 +20,17 @@ module.exports = {
     }));
     app.use(bodyParser.json());
 
-    SensorModel(io);
+    const databaseUri = process.env.MONGODB_URI || 'mongodb://localhost/test';
+    mongoose.Promise = global.Promise;
+    mongoose.connect(databaseUri);
+    mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
+    mongoose.connection.once('open', () => {
+      SensorModel(io, mongoose);
 
-    // io.on('connect', () => {
-    //   io.emit('testing');
-    // });
-
-    const port = process.env.PORT || 3001;
-    http.listen(port, function() {
-      console.log('Running on ' + port);
-      // io.emit('testing');
+      const port = process.env.PORT || 3001;
+      http.listen(port, function() {
+        console.log('Running on ' + port);
+      });
     });
   }
 };

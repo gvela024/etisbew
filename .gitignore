@@ -2,3 +2,4 @@ node_modules
 npm-debug.log
 coverage
 src/static/bundle.js
+data
