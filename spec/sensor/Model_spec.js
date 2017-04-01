@@ -38,21 +38,21 @@ describe('src.sensor.Model', () => {
   };
 
   const someSensors = [{
-    id: 1234,
+    id: '1234',
     description: 'the description',
     latitude: 12.34,
     longitude: 12.34,
     temperature: 1,
     relativeHumidity: 2
   }, {
-    id: 5678,
+    id: '5678',
     description: 'the other description',
     latitude: 56.34,
     longitude: 23.34,
     temperature: 12,
     relativeHumidity: 23
   }, {
-    id: 3,
+    id: '3',
     description: 'the final description',
     latitude: 12.43,
     longitude: 12.21,
@@ -117,7 +117,7 @@ describe('src.sensor.Model', () => {
 
   it('should set up the database model when initialized', () => {
     mongoose.Schema.shouldBeCalledWith(mach.same({
-        id: Number,
+        id: String,
         description: String,
         location: {
           latitude: Number,
@@ -137,7 +137,7 @@ describe('src.sensor.Model', () => {
 
   it('should update the list of sensors when a new sensor is created', () => {
     const newSensor = {
-      id: 1234,
+      id: '1234',
       description: 'the description',
       latitude: 12.34,
       longitude: 12.34,

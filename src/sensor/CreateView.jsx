@@ -7,7 +7,7 @@ const ControlLabel = require('react-bootstrap/lib/ControlLabel');
 
 const numberOfValidForms = 6;
 
-class CreateModifySensorView extends React.Component {
+class CreateSensorView extends React.Component {
   constructor(props) {
     super(props);
 
@@ -69,6 +69,18 @@ class CreateModifySensorView extends React.Component {
     })
   }
 
+  handleCreate(event) {
+    event.preventDefault();
+    this.props.socket.emit('newSensorCreated', {
+      id: this.state.id,
+      description: this.state.description,
+      latitude: this.state.latitude,
+      longitude: this.state.longitude,
+      temperature: this.state.temperature,
+      relativeHumidity: this.state.relativeHumidity
+    });
+  }
+
   render() {
     return (
       <div>
@@ -102,18 +114,6 @@ class CreateModifySensorView extends React.Component {
       </div>
     )
   }
-
-  handleCreate(event) {
-    event.preventDefault();
-    this.props.socket.emit('newSensorCreated', {
-      id: this.state.id,
-      description: this.state.description,
-      latitude: this.state.latitude,
-      longitude: this.state.longitude,
-      temperature: this.state.temperature,
-      relativeHumidity: this.state.relativeHumidity
-    });
-  }
 }
 
-module.exports = CreateModifySensorView;
+module.exports = CreateSensorView;

@@ -2,7 +2,7 @@
 
 module.exports = (io, mongoose) => {
   const sensorSchema = mongoose.Schema({
-    id: Number,
+    id: String,
     description: String,
     location: {
       latitude: Number,
@@ -17,6 +17,7 @@ module.exports = (io, mongoose) => {
   const SensorModel = mongoose.model('Sensor', sensorSchema);
 
   io.on('connect', (socket) => {
+    console.log('connnected\n', socket.handshake);
     socket.on('newSensorCreated', (newSensor) => {
       updateList(newSensor);
     });
