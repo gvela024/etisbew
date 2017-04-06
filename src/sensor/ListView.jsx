@@ -10,7 +10,7 @@ class SensorRow extends React.Component {
   render() {
     return (
       <tr>
-        <td>{this.props.sensor.id}</td>
+        <td>{this.props.sensor.identification}</td>
         <td>{this.props.sensor.description}</td>
         <td>{this.props.sensor.location.latitude}, {this.props.sensor.location.longitude}</td>
         <td>todo status</td>
@@ -26,6 +26,7 @@ class SensorsListView extends React.Component {
     this.state = { sensors: [] };
 
     this.props.socket.on('returningSensorList', (sensors) => {
+      console.log(sensors);
       this.setState({ sensors: sensors});
     });
 
@@ -40,7 +41,7 @@ class SensorsListView extends React.Component {
 
   render() {
       const sensorRows = this.state.sensors.map(function(sensor) {
-        return <SensorRow key={ sensor.id } sensor={ sensor } />
+        return <SensorRow key={ sensor.identification } sensor={ sensor } />
       });
 
       return (

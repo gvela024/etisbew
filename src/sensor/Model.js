@@ -2,7 +2,7 @@
 
 module.exports = (io, mongoose) => {
   const sensorSchema = mongoose.Schema({
-    id: String,
+    identification: String,
     description: String,
     location: {
       latitude: Number,
@@ -17,22 +17,24 @@ module.exports = (io, mongoose) => {
   const SensorModel = mongoose.model('Sensor', sensorSchema);
 
   io.on('connect', (socket) => {
-    console.log('connnected\n', socket.handshake);
     socket.on('newSensorCreated', (newSensor) => {
       updateList(newSensor);
     });
 
     socket.on('requestSensorList', () => {
-      SensorModel.find((error, sensors) => {
-        socket.emit('returningSensorList', sensors)
-      });
+      sendUpdatedSensorListToClients(socket);
+    });
+
+    socket.on('deleteSensorById', (idOfSensorToDelete) => {
+      removeSenorFromModel(idOfSensorToDelete);
+      sendUpdatedSensorListToClients(socket);
     });
   });
 
   const updateList = (newSensor) => {
     const timestamp = new Date();
     const sensor = new SensorModel({
-      id: newSensor.id,
+      identification: newSensor.identification,
       description: newSensor.description,
       location: {
         latitude: newSensor.latitude,
@@ -52,6 +54,20 @@ module.exports = (io, mongoose) => {
   const publishUpdate = () => {
     SensorModel.find((error, sensors) => {
       io.emit('sensorListUpdated', sensors);
+    });
+  }
+
+  const removeSenorFromModel = (identification) => {
+    SensorModel.findOneAndRemove({
+      'identification': identification
+    }, (error, sensor) => {
+      // do nothing
+    });
+  }
+
+  const sendUpdatedSensorListToClients = (socket) => {
+    SensorModel.find((error, sensors) => {
+      socket.emit('returningSensorList', sensors)
     });
   }
 }

@@ -1,8 +1,11 @@
 const React = require('react');
 const ReactDom = require('react-dom');
 const Table = require('react-bootstrap/lib/Table');
+const Tabs = require('react-bootstrap/lib/Tabs');
+const Tab = require('react-bootstrap/lib/Tab');
 
 const CreateSensorView = require('./../sensor/CreateView');
+const DeleteSensorView = require('./../sensor/DeleteView');
 const SensorsListView = require('./../sensor/ListView');
 
 const _socket = io();
@@ -13,7 +16,13 @@ class ComponentOrganizationView extends React.Component {
         <tbody>
           <tr>
             <td><SensorsListView socket={_socket}/></td>
-            <td><CreateSensorView socket={_socket}/></td>
+            <td>
+              <h2>Sensor Modification</h2>
+              <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
+                <Tab eventKey={1} title="Create"><CreateSensorView socket={_socket}/></Tab>
+                <Tab eventKey={2} title="Delete"><DeleteSensorView socket={_socket}/></Tab>
+              </Tabs>
+            </td>
           </tr>
         </tbody>
       </Table>

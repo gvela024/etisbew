@@ -13,7 +13,7 @@ class CreateSensorView extends React.Component {
 
     this.state = {
       validFormCount: 0,
-      id: 0,
+      identification: 0,
       description: '',
       latitude: 0,
       longitude: 0,
@@ -34,7 +34,7 @@ class CreateSensorView extends React.Component {
   }
 
   validateId() {
-    return this.hasValue(this.state.id);
+    return this.hasValue(this.state.identification);
   }
 
   validateDescription() {
@@ -58,7 +58,7 @@ class CreateSensorView extends React.Component {
   }
 
   ifAtLeastOneFormIsEmpty() {
-    return this.state.id.length > 0 && this.state.description.length > 0 && this.state.latitude.length > 0 && this.state.longitude.length > 0 && this.state.temperature.length > 0 && this.state.relativeHumidity.length > 0
+    return this.state.identification.length > 0 && this.state.description.length > 0 && this.state.latitude.length > 0 && this.state.longitude.length > 0 && this.state.temperature.length > 0 && this.state.relativeHumidity.length > 0
       ? false
       : true;
   }
@@ -72,7 +72,7 @@ class CreateSensorView extends React.Component {
   handleCreate(event) {
     event.preventDefault();
     this.props.socket.emit('newSensorCreated', {
-      id: this.state.id,
+      identification: this.state.identification,
       description: this.state.description,
       latitude: this.state.latitude,
       longitude: this.state.longitude,
@@ -87,7 +87,7 @@ class CreateSensorView extends React.Component {
         <Panel header='Create Sensor'>
           <FormGroup validationState={this.validateId()}>
             <ControlLabel>ID</ControlLabel>
-            <FormControl name='id' type='text' placeholder='12ab' onChange={this.handleInputChange}/>
+            <FormControl name='identification' type='text' placeholder='12ab' onChange={this.handleInputChange}/>
           </FormGroup>
           <FormGroup validationState={this.validateDescription()}>
             <ControlLabel>Description</ControlLabel>

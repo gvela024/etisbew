@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 const SensorModel = require('./sensor/Model');
 
 module.exports = {
-  start: () => {
+  start: (output) => {
     const app = express();
     const http = Server(app);
     const io = socketIo(http);
@@ -29,7 +29,7 @@ module.exports = {
 
       const port = process.env.PORT || 3001;
       http.listen(port, function() {
-        console.log('Running on ' + port);
+        output('Running on ' + port);
       });
     });
   }

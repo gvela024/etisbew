@@ -28,6 +28,14 @@ describe('src.sensor.Model', () => {
   MongooseModel.find = (response) => {
     response(null, mongooseStorage);
   };
+  MongooseModel.findOneAndRemove = (condition, response) => {
+    let indexToRemove;
+    mongooseStorage.forEach((sensor, index) => {
+      if(sensor.identification === condition.identification) indexToRemove = index;
+    });
+    mongooseStorage.splice(indexToRemove, 1);
+    response(); // todo - should do something...
+  }
   const mongoose = {
     Schema: mach.mockFunction('mongoose.Schema'),
     model: (name, schema) => {
@@ -38,21 +46,21 @@ describe('src.sensor.Model', () => {
   };
 
   const someSensors = [{
-    id: '1234',
+    identification: '1234',
     description: 'the description',
     latitude: 12.34,
     longitude: 12.34,
     temperature: 1,
     relativeHumidity: 2
   }, {
-    id: '5678',
+    identification: '5678',
     description: 'the other description',
     latitude: 56.34,
     longitude: 23.34,
     temperature: 12,
     relativeHumidity: 23
   }, {
-    id: '3',
+    identification: '3',
     description: 'the final description',
     latitude: 12.43,
     longitude: 12.21,
@@ -73,7 +81,7 @@ describe('src.sensor.Model', () => {
   };
 
   const theSensorShouldMatch = (start, end, sensor, indexOfExpected) => {
-    expect(sensor.id).toEqual(sensorsDouble[indexOfExpected].id);
+    expect(sensor.identification).toEqual(sensorsDouble[indexOfExpected].identification);
     expect(sensor.description).toEqual(sensorsDouble[indexOfExpected].description);
     expect(sensor.location).toEqual(sensorsDouble[indexOfExpected].location);
     expect(sensor.readings[0].temperature).toEqual(sensorsDouble[indexOfExpected].readings[0].temperature);
@@ -115,9 +123,19 @@ describe('src.sensor.Model', () => {
       });
   }
 
+  const whenSensorIsDeleted = (sensorToDelete) => {
+    socket.emit('deleteSensorById', sensorToDelete.identification);
+  }
+
+  const sensorShouldNotBeInTheList = (deletedSensor) => {
+    mongooseStorage.forEach((sensor) => {
+      expect(sensor.identification).not.toEqual(deletedSensor.identification);
+    });
+  }
+
   it('should set up the database model when initialized', () => {
     mongoose.Schema.shouldBeCalledWith(mach.same({
-        id: String,
+        identification: String,
         description: String,
         location: {
           latitude: Number,
@@ -137,7 +155,7 @@ describe('src.sensor.Model', () => {
 
   it('should update the list of sensors when a new sensor is created', () => {
     const newSensor = {
-      id: '1234',
+      identification: '1234',
       description: 'the description',
       latitude: 12.34,
       longitude: 12.34,
@@ -163,5 +181,15 @@ describe('src.sensor.Model', () => {
     const end = new Date();
 
     shouldBeAbleToReturnTheListOfSensorsThatWereAdded(start, end, done);
+  });
+
+  it('should delete a sensor', () => {
+    givenThatSensorModelHasBeenInitialized();
+    givenThatAClientHasConnected();
+    givenThatSomeSensorsHaveBeenAdded();
+
+    const deletedSensor = someSensors[1];
+    whenSensorIsDeleted(deletedSensor);
+    sensorShouldNotBeInTheList(deletedSensor);
   });
 });

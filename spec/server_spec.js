@@ -15,9 +15,11 @@ describe('src.server', () => {
   }
   express.static = mach.mockFunction('express.static');
 
-  const Server = mach.mockObject({
-    listen: () => {}
-  }, 'Server');
+  const Server = {
+    listen: (port, action) => {
+      action();
+    }
+  };
 
   const http = {
     Server: () => {
@@ -57,6 +59,8 @@ describe('src.server', () => {
     connection: mongooseUtils
   }, 'mongoose');
 
+  const output = mach.mockFunction('console.log');
+
   const server = proxyquire(
     '../src/server.js', {
       'express': express,
@@ -81,8 +85,9 @@ describe('src.server', () => {
       .then(mongoose.connect.shouldBeCalledWith(localDatabaseUri))
       .then(mongooseUtils.on.shouldBeCalledWith('error', mach.any))
       .then(SensorModel.shouldBeCalledWith(mach.same(io), mach.same(mongoose)))
-      .then(Server.listen.shouldBeCalledWith(port, mach.any))
-      .when(server.start);
+      .then(output.shouldBeCalledWith('Running on ' + port))
+      .when(() => {
+        server.start(output)});
     done();
   });
 });
