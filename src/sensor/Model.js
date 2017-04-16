@@ -29,6 +29,20 @@ module.exports = (io, mongoose) => {
       removeSenorFromModel(idOfSensorToDelete);
       sendUpdatedSensorListToClients(socket);
     });
+
+    socket.on('requestSensorById', (idOfSensorToFind) => {
+      sendSensorToClient(idOfSensorToFind, socket);
+    });
+
+    socket.on('updateSensor', (sensor) => {
+      update(sensor);
+      sendUpdatedSensorListToClients(socket);
+    });
+
+    socket.on('newReadingFromSensor', (identification, reading) => {
+      updateSensorWithReading(identification, reading);
+      sendUpdatedSensorListToClients(socket);
+    });
   });
 
   const updateList = (newSensor) => {
@@ -59,7 +73,7 @@ module.exports = (io, mongoose) => {
 
   const removeSenorFromModel = (identification) => {
     SensorModel.findOneAndRemove({
-      'identification': identification
+      identification: identification
     }, (error, sensor) => {
       // do nothing
     });
@@ -67,7 +81,48 @@ module.exports = (io, mongoose) => {
 
   const sendUpdatedSensorListToClients = (socket) => {
     SensorModel.find((error, sensors) => {
-      socket.emit('returningSensorList', sensors)
+      socket.emit('returningSensorList', sensors);
     });
+  }
+
+  const sendSensorToClient = (identification, socket) => {
+    SensorModel.findOne({
+      identification: identification
+    }, (error, sensor) => {
+      if (erro) console.log('error', error);
+      socket.emit('returningSensor', sensor);
+    });
+  }
+
+  const update = (sensor) => {
+    SensorModel.findOneAndUpdate({
+        identification: sensor.identification
+      },
+      sensor, {
+        new: true
+      },
+      (error, doc) => {
+        if (error) console.log('error', error);
+      });
+  }
+
+  const updateSensorWithReading = (identification, reading) => {
+    const timestamp = new Date();
+    SensorModel.findOneAndUpdate({
+        identification: identification
+      }, {
+        $push: {
+          'readings': {
+            temperature: reading.temperature,
+            relativeHumidity: reading.relativeHumidity,
+            timestamp: timestamp
+          }
+        }
+      }, {
+        new: true
+      },
+      (error, doc) => {
+        if (error) console.log('error', error);
+      });
   }
 }

@@ -10,23 +10,25 @@ class DeleteView extends React.Component {
     super(props);
 
     this.state = {
-      identification: 0,
+      identification: '',
       sensors: [],
       ifTheSensorIdIsNotInTheList: true
     };
 
-    // fixme: this is a hack but we are depending on the `requestSensorList` event
-    // being sent from sensor/ListView
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+
+  componentDidMount() {
     this.props.socket.on('returningSensorList', (sensors) => {
-      this.setState({sensors: sensors});
+      this.setState({ sensors: sensors});
     });
 
     this.props.socket.on('sensorListUpdated', (sensors) => {
       this.setState({ sensors: sensors});
     });
 
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
+    this.props.socket.emit('requestSensorList');
   }
 
   handleInputChange(event) {
@@ -55,7 +57,7 @@ class DeleteView extends React.Component {
             <ControlLabel>ID</ControlLabel>
             <FormControl name='identification' type='text' placeholder='12ab' onChange={this.handleInputChange}/>
           </FormGroup>
-          <Button bsStyle="danger" onClick={this.handleDelete} disabled={this.state.ifTheSensorIdIsNotInTheList}>Delete</Button>
+          <Button bsStyle='danger' onClick={this.handleDelete} disabled={this.state.ifTheSensorIdIsNotInTheList}>Delete</Button>
         </Panel>
       </div>
     )

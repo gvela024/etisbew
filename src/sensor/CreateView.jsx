@@ -13,7 +13,7 @@ class CreateSensorView extends React.Component {
 
     this.state = {
       validFormCount: 0,
-      identification: 0,
+      identification: '',
       description: '',
       latitude: 0,
       longitude: 0,
