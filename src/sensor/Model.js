@@ -89,7 +89,7 @@ module.exports = (io, mongoose) => {
     SensorModel.findOne({
       identification: identification
     }, (error, sensor) => {
-      if (erro) console.log('error', error);
+      if (error) console.log('error', error);
       socket.emit('returningSensor', sensor);
     });
   }
