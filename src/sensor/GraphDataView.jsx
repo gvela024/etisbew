@@ -19,7 +19,9 @@ const options = {
     1: {
       title: 'Compass'
     }
-  }
+  },
+  width: 800,
+  height: 500,
 };
 
 class GraphDataView extends React.Component {
