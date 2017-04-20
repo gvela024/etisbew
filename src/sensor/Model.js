@@ -27,7 +27,7 @@ module.exports = (io, mongoose) => {
 
     socket.on('deleteSensorById', (idOfSensorToDelete) => {
       removeSenorFromModel(idOfSensorToDelete);
-      sendUpdatedSensorListToClients(socket);
+      publishUpdate(socket);
     });
 
     socket.on('requestSensorById', (idOfSensorToFind) => {
@@ -36,12 +36,12 @@ module.exports = (io, mongoose) => {
 
     socket.on('updateSensor', (sensor) => {
       update(sensor);
-      sendUpdatedSensorListToClients(socket);
+      publishUpdate(socket);
     });
 
     socket.on('newReadingFromSensor', (identification, reading) => {
       updateSensorWithReading(identification, reading);
-      sendUpdatedSensorListToClients(socket);
+      publishUpdate(socket);
     });
   });
 

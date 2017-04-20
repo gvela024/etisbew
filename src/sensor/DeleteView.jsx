@@ -11,7 +11,6 @@ class DeleteView extends React.Component {
 
     this.state = {
       identification: '',
-      sensors: [],
       ifTheSensorIdIsNotInTheList: true
     };
 
@@ -19,21 +18,9 @@ class DeleteView extends React.Component {
     this.handleDelete = this.handleDelete.bind(this);
   }
 
-  componentDidMount() {
-    this.props.socket.on('returningSensorList', (sensors) => {
-      this.setState({ sensors: sensors});
-    });
-
-    this.props.socket.on('sensorListUpdated', (sensors) => {
-      this.setState({ sensors: sensors});
-    });
-
-    this.props.socket.emit('requestSensorList');
-  }
-
   handleInputChange(event) {
     let sensorNotInTheList = true;
-    this.state.sensors.forEach((sensor) => {
+    this.props.sensors.forEach((sensor) => {
       if (sensor.identification === event.target.value) {
         sensorNotInTheList = false;
       }

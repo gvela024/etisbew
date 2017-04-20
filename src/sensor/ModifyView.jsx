@@ -13,7 +13,6 @@ class ModifyView extends React.Component {
 
     this.state = {
       identification: '',
-      sensors: [],
       ifTheSensorIdIsNotInTheList: true,
       ifASensorIsNotLoaded: true,
       loadedSensor: {}
@@ -24,25 +23,17 @@ class ModifyView extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  componentDidMount() {
-    this.props.socket.on('returningSensorList', (sensors) => {
-      this.setState({sensors: sensors});
-    });
-
-    this.props.socket.on('sensorListUpdated', (sensors) => {
-      this.setState({sensors: sensors});
-    });
-
-    this.props.socket.on('returningSensor', (sensor) => {
-      this.setState({loadedSensor: sensor, ifASensorIsNotLoaded: false});
-    })
-
-    this.props.socket.emit('requestSensorList');
-  }
-
   loadSensor(event) {
     event.preventDefault();
-    this.props.socket.emit('requestSensorById', this.state.identification);
+    let index = null;
+    this.props.sensors.forEach((sensor, _index) => {
+      if (sensor.identification === this.state.identification) {
+        index = _index;
+      }
+    });
+    if (index !== null) {
+      this.setState({loadedSensor: this.props.sensors[index], ifASensorIsNotLoaded: false});
+    }
   }
 
   clearSensor(event) {
@@ -58,7 +49,7 @@ class ModifyView extends React.Component {
 
   handleInputChange(event) {
     let sensorNotInTheList = true;
-    this.state.sensors.forEach((sensor) => {
+    this.props.sensors.forEach((sensor) => {
       if (sensor.identification === event.target.value) {
         sensorNotInTheList = false;
       }
@@ -125,9 +116,7 @@ class ModifySensor extends React.Component {
     let readings = this.state.readings.slice();
     readings[event.index][event.name] = event.value
 
-    this.setState({
-      readings: readings
-    });
+    this.setState({readings: readings});
   }
 
   render() {
@@ -181,11 +170,7 @@ class SensorReadings extends React.Component {
   }
 
   handleInputChange(event) {
-    this.props.handleInputChange({
-      name: event.target.name,
-      value: event.target.value,
-      index: this.props.index
-    });
+    this.props.handleInputChange({name: event.target.name, value: event.target.value, index: this.props.index});
   }
 
   render() {

@@ -7,7 +7,7 @@ const ControlLabel = require('react-bootstrap/lib/ControlLabel');
 
 const numberOfValidForms = 6;
 
-class CreateSensorView extends React.Component {
+class CreateView extends React.Component {
   constructor(props) {
     super(props);
 
@@ -116,4 +116,4 @@ class CreateSensorView extends React.Component {
   }
 }
 
-module.exports = CreateSensorView;
+module.exports = CreateView;
