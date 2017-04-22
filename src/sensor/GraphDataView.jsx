@@ -14,10 +14,10 @@ const options = {
   },
   vAxes: {
     0: {
-      title: 'Accelerometer'
+      title: 'Accelerometer x-Axis'
     },
     1: {
-      title: 'Compass'
+      title: 'Accelerometer y-Axis'
     }
   },
   width: 800,
@@ -31,8 +31,8 @@ class GraphDataView extends React.Component {
     const prepareChart = () => {
       this.data = new this.google.visualization.DataTable();
       this.data.addColumn('string', 'Timestamp');
-      this.data.addColumn('number', 'Accelerometer');
-      this.data.addColumn('number', 'Compass');
+      this.data.addColumn('number', 'Accelerometer x-Axis');
+      this.data.addColumn('number', 'Accelerometer y-Axis');
       this.chart = new this.google.visualization.LineChart(document.getElementById('chart_div'));
     }
 
