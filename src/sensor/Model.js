@@ -108,24 +108,21 @@ module.exports = (io, mongoose) => {
 
   const updateSensorWithReading = (identification, reading) => {
     const timestamp = new Date();
-    console.log('test phone sensor reading');
-    console.log('identification: ', identification);
-    console.log('reading: ', reading);
-    // SensorModel.findOneAndUpdate({
-    //     identification: identification
-    //   }, {
-    //     $push: {
-    //       'readings': {
-    //         temperature: reading.temperature,
-    //         relativeHumidity: reading.relativeHumidity,
-    //         timestamp: timestamp
-    //       }
-    //     }
-    //   }, {
-    //     new: true
-    //   },
-    //   (error, doc) => {
-    //     if (error) console.log('error', error);
-    //   });
+    SensorModel.findOneAndUpdate({
+        identification: identification
+      }, {
+        $push: {
+          'readings': {
+            temperature: reading.temperature,
+            relativeHumidity: reading.relativeHumidity,
+            timestamp: timestamp
+          }
+        }
+      }, {
+        new: true
+      },
+      (error, doc) => {
+        if (error) console.log('error', error);
+      });
   }
 }
