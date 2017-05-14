@@ -6,6 +6,7 @@ const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
 const path = require('path');
 const mongoose = require('mongoose');
+const enforce = require('express-sslify');
 
 const SensorModel = require('./sensor/Model');
 
@@ -19,6 +20,10 @@ module.exports = {
       extensions: ['html', 'js', 'jsx']
     }));
     app.use(bodyParser.json());
+    app.use(enforce.HTTPS({
+      trustProtoHeader: true
+    }));
+
 
     const databaseUri = process.env.MONGODB_URI || 'mongodb://localhost/test';
     mongoose.Promise = global.Promise;
