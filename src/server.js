@@ -20,9 +20,9 @@ module.exports = {
 
     const databaseUri = process.env.MONGODB_URI || localEnvironment;
     if (databaseUri !== localEnvironment) {
-      app.use(secure.HTTPS({
-        trustProtoHeader: true
-      }));
+      // app.use(secure.HTTPS({
+      //   trustProtoHeader: true
+      // }));
     }
     app.use(express.static(path.join(__dirname, 'static'), {
       extensions: ['html', 'js', 'jsx']
