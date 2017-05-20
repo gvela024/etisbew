@@ -21,13 +21,16 @@ module.exports = {
 
     const databaseUri = process.env.MONGODB_URI || localEnvironment;
     if (databaseUri !== localEnvironment) {
+      console.log('Secure');
+
       const sixtyDaysInSeconds = 5184000
       app.use(helmet.hsts({
         maxAge: sixtyDaysInSeconds
       }));
-      app.use(secure.HTTPS({
-        trustProtoHeader: true
-      }));
+      
+      // app.use(secure.HTTPS({
+      //   trustProtoHeader: true
+      // }));
     }
     app.use(express.static(path.join(__dirname, 'static'), {
       extensions: ['html', 'js', 'jsx']
