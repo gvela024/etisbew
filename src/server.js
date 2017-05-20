@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const mongoose = require('mongoose');
 const secure = require('express-sslify');
+const helmet = require('helmet');
 
 const SensorModel = require('./sensor/Model');
 
@@ -20,6 +21,10 @@ module.exports = {
 
     const databaseUri = process.env.MONGODB_URI || localEnvironment;
     if (databaseUri !== localEnvironment) {
+      const sixtyDaysInSeconds = 5184000
+      app.use(helmet.hsts({
+        maxAge: sixtyDaysInSeconds
+      }));
       app.use(secure.HTTPS({
         trustProtoHeader: true
       }));
