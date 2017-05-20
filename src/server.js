@@ -19,15 +19,18 @@ module.exports = {
     const http = Server(app);
     const io = socketIo(http);
 
+    console.log('HSTS...');
+    const sixtyDaysInSeconds = 5184000
+    app.use(helmet.hsts({
+      maxAge: sixtyDaysInSeconds
+    }));
+    console.log('done.');
+
     const databaseUri = process.env.MONGODB_URI || localEnvironment;
     if (databaseUri !== localEnvironment) {
       console.log('Secure');
 
-      const sixtyDaysInSeconds = 5184000
-      app.use(helmet.hsts({
-        maxAge: sixtyDaysInSeconds
-      }));
-      
+
       // app.use(secure.HTTPS({
       //   trustProtoHeader: true
       // }));
