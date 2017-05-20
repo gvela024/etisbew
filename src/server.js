@@ -23,16 +23,17 @@ module.exports = {
     const databaseUri = process.env.MONGODB_URI || localEnvironment;
     if (databaseUri !== localEnvironment) {
       console.log('Securing site.');
-      console.log('HSTS...');
-      const sixtyDaysInSeconds = 5184000
-      app.use(helmet.hsts({
-        maxAge: sixtyDaysInSeconds
-      }));
-      console.log('done.');
-
       console.log('Adding HTTP to HTTPS rerouting...');
       app.use(secure.HTTPS({
         trustProtoHeader: true
+      }));
+      console.log('done.');
+
+      console.log('HSTS...');
+      const sixtyDaysInSeconds = 5184000
+      app.use(helmet.hsts({
+        maxAge: sixtyDaysInSeconds,
+        force: true
       }));
       console.log('done.');
     }
