@@ -22,10 +22,11 @@ module.exports = {
 
     const databaseUri = process.env.MONGODB_URI || localEnvironment;
     if (databaseUri !== localEnvironment) {
-      const sixtyDaysInSeconds = 5184000
+      const secondsInYear = 31557600
       app.use(helmet.hsts({
-        maxAge: sixtyDaysInSeconds,
-        force: true
+        maxAge: secondsInYear,
+        force: true,
+        preload: true
       }));
 
       app.use(secure.HTTPS({
