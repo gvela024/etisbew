@@ -19,21 +19,22 @@ module.exports = {
     const http = Server(app);
     const io = socketIo(http);
 
-    console.log('HSTS...');
-    const sixtyDaysInSeconds = 5184000
-    app.use(helmet.hsts({
-      maxAge: sixtyDaysInSeconds
-    }));
-    console.log('done.');
 
     const databaseUri = process.env.MONGODB_URI || localEnvironment;
     if (databaseUri !== localEnvironment) {
-      console.log('Secure');
+      console.log('Securing site.');
+      console.log('HSTS...');
+      const sixtyDaysInSeconds = 5184000
+      app.use(helmet.hsts({
+        maxAge: sixtyDaysInSeconds
+      }));
+      console.log('done.');
 
-
-      // app.use(secure.HTTPS({
-      //   trustProtoHeader: true
-      // }));
+      console.log('Adding HTTP to HTTPS rerouting...');
+      app.use(secure.HTTPS({
+        trustProtoHeader: true
+      }));
+      console.log('done.');
     }
     app.use(express.static(path.join(__dirname, 'static'), {
       extensions: ['html', 'js', 'jsx']
