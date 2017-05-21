@@ -19,7 +19,6 @@ module.exports = {
     const http = Server(app);
     const io = socketIo(http);
 
-
     const databaseUri = process.env.MONGODB_URI || localEnvironment;
     if (databaseUri !== localEnvironment) {
       const secondsInYear = 31557600
@@ -27,6 +26,10 @@ module.exports = {
         maxAge: secondsInYear,
         force: true,
         preload: true
+      }));
+
+      app.use(helmet.frameguard({
+        action: 'deny'
       }));
 
       app.use(secure.HTTPS({
