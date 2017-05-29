@@ -32,6 +32,8 @@ module.exports = {
         action: 'deny'
       }));
 
+      app.use(helmet.xssFilter());
+
       app.use(secure.HTTPS({
         trustProtoHeader: true
       }));
