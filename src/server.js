@@ -32,7 +32,12 @@ module.exports = {
         action: 'deny'
       }));
 
-      app.use(helmet.xssFilter());
+      app.use((req, res, next) => {
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        next();
+      });
+
+      // app.use(helmet.xssFilter());
 
       app.use(secure.HTTPS({
         trustProtoHeader: true
