@@ -41,7 +41,10 @@ Clickjacking is when an attacker puts a transparent layer over an existing websi
 ```
 I created a [`clickjack-testing-etisbew`](https://github.com/gvela024/clickjack-testing-etisbew) repo for testing this and without `X-Frame-Options`, I am able to see `etisbew` inside of `clickjack-testing-etisbew`.
 
-### Cross-Site Scripting (XSS)
+### X-Content-Type-Options
+"X-Content-Type-Options is a header supported by Internet Explorer, Chrome and Firefox 50+ that tells it not to load scripts and stylesheets unless the server indicates the correct MIME type. Without this header, these browsers can incorrectly detect files as scripts and stylesheets, leading to XSS attacks. As such, all sites must set the X-Content-Type-Options header and the appropriate MIME types for files that they serve." - [Mozilla Security](https://wiki.mozilla.org/Security/Guidelines/Web_Security#X-Content-Type-Options)
+
+### Content Security Policy
 Cross site scripting is when malicious code (JavaScript, HTML, or any other web embeddable code) is embedded into a trusted website. The malicious code is capable of doing many things. Often, the malicious code gathers information that only the trusted page has access to (cookies and other session data) and sends it to the attacker. XSS has been expanded to have at the moment 2 different categories. `Stored` (or persistend) is when the malicious code is stored in the server of the vulnerable site and is loaded by the client. `Relfected` (or non-persistent) is when the malicious code is sent to the client in an a notification or email when the malicious code travels to the vulnerable site and is executed since it is from a trusted source [Source: OWASP](https://www.owasp.org/index.php/Cross-site_Scripting_%28XSS%29).
 There really isn't an easy way to test this. I tried several things like putting HTML or JavaScript into the URL or other inputs. I'm sure if I was an expert hacker, I could expose some vulnerability. In any case, the Mozilla Observatory recommends setting the `X-Content-Type-Options` in the header to prevent browsers from incorrectly detecting non-scripts as scripts.
 

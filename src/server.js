@@ -37,6 +37,11 @@ module.exports = {
         next();
       });
 
+      app.use((req, res, next) => {
+        res.setHeader(`Content-Security-Policy`, 'default-src https:');
+        next();
+      });
+
       // app.use(helmet.xssFilter());
 
       app.use(secure.HTTPS({
