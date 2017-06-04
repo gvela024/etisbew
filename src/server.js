@@ -53,30 +53,32 @@ module.exports = {
       // });
 
       app.use(helmet.contentSecurityPolicy({
-        defaultSrc: ["'none'"],
-        scriptSrc: [
-          "'self'",
-          "'unsafe-inline'",
-          "https://www.gstatic.com/charts/loader.js"
-        ],
-        styleSrc: [
-          "'self'",
-          "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-        ],
-        fontSrc: [
-          "'self'",
-          "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff2",
-          "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff",
-          "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.ttf"
-        ],
-        imgSrc: ["'self'", 'data:'],
-        reportUri: '/report-violation',
-        objectSrc: ["'none'"],
-        connectSrc: [
-          "'self'",
-          "wss://etisbew.herokuapp.com/socket.io"
-        ],
-        upgradeInsecureRequests: true
+        directives: {
+          defaultSrc: ["'none'"],
+          scriptSrc: [
+            "'self'",
+            "'unsafe-inline'",
+            "https://www.gstatic.com/charts/loader.js"
+          ],
+          styleSrc: [
+            "'self'",
+            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          ],
+          fontSrc: [
+            "'self'",
+            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff2",
+            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff",
+            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.ttf"
+          ],
+          imgSrc: ["'self'", 'data:'],
+          reportUri: '/report-violation',
+          objectSrc: ["'none'"],
+          connectSrc: [
+            "'self'",
+            "wss://etisbew.herokuapp.com/socket.io"
+          ],
+          upgradeInsecureRequests: true
+        }
       }));
       app.use(bodyParser.json({
         type: ['json', 'application/csp-report']
