@@ -58,7 +58,8 @@ module.exports = {
           scriptSrc: [
             "'self'",
             "'unsafe-inline'",
-            "https://www.gstatic.com/charts/loader.js"
+            "https://www.gstatic.com/charts/loader.js",
+            "https://www.gstatic.com/charts/45.1/loader.js"
           ],
           styleSrc: [
             "'self'",
@@ -75,7 +76,7 @@ module.exports = {
           objectSrc: ["'none'"],
           connectSrc: [
             "'self'",
-            "wss://etisbew.herokuapp.com/socket.io"
+            "wss://etisbew.herokuapp.com"
           ],
           upgradeInsecureRequests: true
         }
