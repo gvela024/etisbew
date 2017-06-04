@@ -41,9 +41,13 @@ module.exports = {
         res.setHeader(`Content-Security-Policy`,
           "default-src 'none'; " +
           "img-src 'self'; " +
-          "script-src 'self'; " +
-          "connect-src 'self'; " +
-          "font-src 'self'; " +
+          "script-src 'self' https://www.gstatic.com/charts/loader.js; " +
+          "connect-src 'self'; wss://etisbew.herokuapp.com/socket.io" +
+          "font-src 'self' " +
+            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff2 " +
+            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff " +
+            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.ttf " +
+            "; " +
           "style-src 'self' https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css");
         next();
       });

@@ -27,7 +27,6 @@ class ComponentOrganizationView extends React.Component {
 
   componentDidMount() {
     socket.on('returningSensorList', (sensors) => {
-      console.log('returning senosr list');
       this.setState({sensors: sensors});
     });
 
