@@ -75,7 +75,7 @@ module.exports = {
         connectSrc: [
           "'self'",
           "wss://etisbew.herokuapp.com/socket.io"
-        ]
+        ],
         upgradeInsecureRequests: true
       }));
       app.use(bodyParser.json({
