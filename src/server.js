@@ -59,7 +59,11 @@ module.exports = {
             "'self'",
             "'unsafe-inline'",
             "https://www.gstatic.com/charts/loader.js",
-            "https://www.gstatic.com/charts/45.1/loader.js"
+            "https://www.gstatic.com/charts/45.1/loader.js",
+            "https://www.gstatic.com/charts/45.1/js/jsapi_compiled_format_module.js",
+            "https://www.gstatic.com/charts/45.1/js/jsapi_compiled_default_module.js",
+            "https://www.gstatic.com/charts/45.1/js/jsapi_compiled_ui_module.js",
+            "https://www.gstatic.com/charts/45.1/js/jsapi_compiled_corechart_module.js"
           ],
           styleSrc: [
             "'self'",
