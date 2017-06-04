@@ -52,7 +52,7 @@ module.exports = {
       //   next();
       // });
 
-      app.use(helmet.csp({
+      app.use(helmet.contentSecurityPolicy({
         defaultSrc: ["'none'"],
         scriptSrc: [
           "'self'",
