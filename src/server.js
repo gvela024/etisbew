@@ -38,7 +38,13 @@ module.exports = {
       });
 
       app.use((req, res, next) => {
-        res.setHeader(`Content-Security-Policy`, "default-src 'none'; img-src 'self'; script-src 'self'; style-src 'self' https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css");
+        res.setHeader(`Content-Security-Policy`,
+          "default-src 'none'; " +
+          "img-src 'self'; " +
+          "script-src 'self'; " +
+          "connect-src 'self'; " +
+          "font-src 'self'; " +
+          "style-src 'self' https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css");
         next();
       });
 
