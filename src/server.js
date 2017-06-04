@@ -37,19 +37,57 @@ module.exports = {
         next();
       });
 
-      app.use((req, res, next) => {
-        res.setHeader(`Content-Security-Policy`,
-          "default-src 'none'; " +
-          "img-src 'self'; " +
-          "script-src 'self' https://www.gstatic.com/charts/loader.js; " +
-          "connect-src 'self'; wss://etisbew.herokuapp.com/socket.io" +
-          "font-src 'self' " +
-            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff2 " +
-            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff " +
-            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.ttf " +
-            "; " +
-          "style-src 'self' https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css");
-        next();
+      // app.use((req, res, next) => {
+      //   res.setHeader(`Content-Security-Policy`,
+      //     "default-src 'none'; " +
+      //     "img-src 'self'; " +
+      //     "script-src 'self' https://www.gstatic.com/charts/loader.js; " +
+      //     "connect-src 'self'; wss://etisbew.herokuapp.com/socket.io" +
+      //     "font-src 'self' " +
+      //     "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff2 " +
+      //     "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff " +
+      //     "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.ttf " +
+      //     "; " +
+      //     "style-src 'self' https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css");
+      //   next();
+      // });
+
+      app.use(helmet.csp({
+        defaultSrc: ["'none'"],
+        scriptSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://www.gstatic.com/charts/loader.js"
+        ],
+        styleSrc: [
+          "'self'",
+          "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+        ],
+        fontSrc: [
+          "'self'",
+          "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff2",
+          "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff",
+          "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.ttf"
+        ],
+        imgSrc: ["'self'", 'data:'],
+        reportUri: '/report-violation',
+        objectSrc: ["'none'"],
+        connectSrc: [
+          "'self'",
+          "wss://etisbew.herokuapp.com/socket.io"
+        ]
+        upgradeInsecureRequests: true
+      }));
+      app.use(bodyParser.json({
+        type: ['json', 'application/csp-report']
+      }));
+      app.post('/report-violation', function(req, res) {
+        if (req.body) {
+          console.log('CSP Violation: ', req.body)
+        } else {
+          console.log('CSP Violation: No data received!')
+        }
+        res.status(204).end()
       });
 
       app.use(helmet.xssFilter());
