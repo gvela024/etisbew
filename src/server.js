@@ -37,49 +37,24 @@ module.exports = {
         next();
       });
 
-      // app.use((req, res, next) => {
-      //   res.setHeader(`Content-Security-Policy`,
-      //     "default-src 'none'; " +
-      //     "img-src 'self'; " +
-      //     "script-src 'self' https://www.gstatic.com/charts/loader.js; " +
-      //     "connect-src 'self'; wss://etisbew.herokuapp.com/socket.io" +
-      //     "font-src 'self' " +
-      //     "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff2 " +
-      //     "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff " +
-      //     "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.ttf " +
-      //     "; " +
-      //     "style-src 'self' https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css");
-      //   next();
-      // });
-
       app.use(helmet.contentSecurityPolicy({
         directives: {
           defaultSrc: ["'none'"],
           scriptSrc: [
             "'self'",
-            "'unsafe-inline'",
-            "https://www.gstatic.com/charts/loader.js",
-            "https://www.gstatic.com/charts/45.1/loader.js",
-            "https://www.gstatic.com/charts/45.1/js/jsapi_compiled_format_module.js",
+            "https://www.gstatic.com/charts/45.1/js/jsapi_compiled_corechart_module.js",
             "https://www.gstatic.com/charts/45.1/js/jsapi_compiled_default_module.js",
+            "https://www.gstatic.com/charts/45.1/js/jsapi_compiled_format_module.js",
             "https://www.gstatic.com/charts/45.1/js/jsapi_compiled_ui_module.js",
-            "https://www.gstatic.com/charts/45.1/js/jsapi_compiled_corechart_module.js"
+            "https://www.gstatic.com/charts/45.1/loader.js",
+            "https://www.gstatic.com/charts/loader.js"
           ],
           styleSrc: [
-            "'self'",
-            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css",
-            "https://www.gstatic.com/charts/45.1/css/core/tooltip.css",
-            "https://www.gstatic.com/charts/45.1/css/util/util.css",
+            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/",
+            "https://www.gstatic.com/charts/45.1/css/core/",
+            "https://www.gstatic.com/charts/45.1/css/util/",
           ],
-          fontSrc: [
-            "'self'",
-            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff2",
-            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff",
-            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.ttf"
-          ],
-          imgSrc: ["'self'", 'data:'],
           reportUri: '/report-violation',
-          objectSrc: ["'none'"],
           connectSrc: [
             "'self'",
             "wss://etisbew.herokuapp.com"
