@@ -5,7 +5,7 @@ const FormGroup = require('react-bootstrap/lib/FormGroup');
 const ControlLabel = require('react-bootstrap/lib/ControlLabel');
 const ButtonToolbar = require('react-bootstrap/lib/ButtonToolbar');
 
-class CreateView extends React.Component {
+class ValidateSensorView extends React.Component {
   constructor(props) {
     super(props);
 
@@ -76,3 +76,5 @@ class SensorBeingPondered extends React.Component {
     )
   }
 }
+
+module.exports = ValidateSensorView;

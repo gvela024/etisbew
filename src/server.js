@@ -58,6 +58,9 @@ module.exports = {
           fontSrc: [
             "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/",
           ],
+          imgSrc: [
+            "https://etisbew.herokuapp.com/favicon.ico"
+          ],
           reportUri: '/report-violation',
           connectSrc: [
             "'self'",
