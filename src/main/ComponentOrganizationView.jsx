@@ -10,6 +10,7 @@ const ModifySensorView = require('./../sensor/ModifyView');
 const SensorsListView = require('./../sensor/ListView');
 const NewSensorReadingView = require('./../sensor/NewReadingView');
 const GraphSensorDataView = require('./../sensor/GraphDataView');
+const ValidateSensorView = require('./../sensor/ValidateSensorView');
 
 const socket = io();
 
@@ -58,6 +59,7 @@ class ComponentOrganizationView extends React.Component {
                 <Tab eventKey={2} title="Delete"><DeleteSensorView socket={socket} sensors={this.state.sensors}/></Tab>
                 <Tab eventKey={3} title="Modify"><ModifySensorView socket={socket} sensors={this.state.sensors}/></Tab>
                 <Tab eventKey={4} title="New Reading"><NewSensorReadingView socket={socket} sensors={this.state.sensors}/></Tab>
+                <Tab eventKey={5} title="Validate Sensor"><ValidateSensorView socket={socket}/></Tab>
               </Tabs>
             </td>
           </tr>

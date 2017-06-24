@@ -49,4 +49,25 @@ Cross site scripting is when malicious code (JavaScript, HTML, or any other web 
 There really isn't an easy way to test this. I tried several things like putting HTML or JavaScript into the URL or other inputs. I'm sure if I was an expert hacker, I could expose some vulnerability. In any case, the Mozilla Observatory recommends setting the `X-Content-Type-Options` in the header to prevent browsers from incorrectly detecting non-scripts as scripts.
 The content security policy I implemented was as secure as I could make it. I had to permit several modules to be loaded from an external site. One of the modules was for charting the data, and the other was the CSS bootstrap that I used to make my site look good.
 
+### Device Authentication
+Difference between Authentication & Authorization
+
+#### Authentication
+Verifying the identity of a person or system in a secure manner (i.e. login credentials).
+
+#### Authorization
+The level of privileges that a user is given (i.e. read/write privilages).
+
+#### Protection Methods
+There are several different protection methods that can be used to authenticate users. They include:
+1. Email authentication: sending an email to authenticate user
+2. Password authentication: user has to enter a known key
+3. Social network authentication: user has to sign into specific social network in order to gain access
+4. Biometrics: using constant human characteristics such as fingerprints or retinal scans
+5. Two factor authentication: using something that is known (password) with something the user has (card, or code sent to mobile)
+
+Unfortunately, the above doesn't really provide what I need. I think instead, I will create a handshake method for the device to be authenticated, and stored in a list of "trusted devices".
+[Source: TheNextWeb "Ultimate guide to device authentication"](https://thenextweb.com/future-of-communications/2016/02/17/the-ultimate-guide-to-selecting-a-device-authentication/#.tnw_6OXYfJ3R)
+
 #### Todo
+Research Mutilidae & Nowasp

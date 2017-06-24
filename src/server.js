@@ -10,6 +10,7 @@ const secure = require('express-sslify');
 const helmet = require('helmet');
 
 const SensorModel = require('./sensor/Model');
+const WhiteList = require('./sensor/WhiteList');
 
 const localEnvironment = 'mongodb://localhost/test';
 
@@ -54,6 +55,9 @@ module.exports = {
             "https://www.gstatic.com/charts/45.1/css/core/",
             "https://www.gstatic.com/charts/45.1/css/util/",
           ],
+          fontSrc: [
+            "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/",
+          ],
           reportUri: '/report-violation',
           connectSrc: [
             "'self'",
@@ -89,7 +93,8 @@ module.exports = {
     mongoose.connect(databaseUri);
     mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
     mongoose.connection.once('open', () => {
-      SensorModel(io, mongoose);
+      const sensorModel = SensorModel(io, mongoose);
+      const whiteList = WhiteList(io, sensorModel);
 
       const port = process.env.PORT || 3001;
       http.listen(port, function() {

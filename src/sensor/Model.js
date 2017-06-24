@@ -17,9 +17,9 @@ module.exports = (io, mongoose) => {
   const SensorModel = mongoose.model('Sensor', sensorSchema);
 
   io.on('connect', (socket) => {
-    socket.on('newSensorCreated', (newSensor) => {
-      updateList(newSensor);
-    });
+    // socket.on('newSensorCreated', (newSensor) => {
+    //   updateList(newSensor);
+    // });
 
     socket.on('requestSensorList', () => {
       sendUpdatedSensorListToClients(socket);
@@ -124,5 +124,9 @@ module.exports = (io, mongoose) => {
       (error, doc) => {
         if (error) console.log('error', error);
       });
+  }
+
+  return {
+    addNewSensor: updateList
   }
 }
