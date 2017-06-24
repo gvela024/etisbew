@@ -37,10 +37,7 @@ class ValidateSensorView extends React.Component {
   render() {
     let sensorBeingPondered = [];
     if(this.state.sensorBeingPondered) {
-      this.setState({ifSensorIsNotBeingPondered: false});
       sensorBeingPondered = <SensorBeingPondered sensor={this.state.sensorBeingPondered}/>
-    } else {
-      this.setSate({ifSensorIsNotBeingPondered: true});
     }
 
     return (
