@@ -28,16 +28,13 @@ class ValidateSensorView extends React.Component {
 
   accept(event) {
     event.preventDefault();
-    this.setState({ifSensorIsNotBeingPondered: true})
-    console.log('accepting sensor');
-    console.log(this.state.sensorBeingPondered);
+    this.props.socket.emit('sensorAccepted', (this.state.sensorBeingPondered));
+    this.setState({sensorBeingPondered: {}, ifSensorIsNotBeingPondered: true})
   }
 
   decline(event) {
     event.preventDefault();
-    this.setState({sensorBeingPondered: {}, ifSensorIsNotBeingPondered: true})
-    console.log('sensor declined');
-    console.log(this.state.sensorBeingPondered);
+    this.setState({sensorBeingPondered: {}, ifSensorIsNotBeingPondered: true});
   }
 
   render() {
@@ -73,9 +70,9 @@ class SensorBeingPondered extends React.Component {
     return (
       <div>
         <Panel>
-          <ControlLabel>ID:          {this.props.sensor.identification}</ControlLabel><br/>
+          <ControlLabel>ID: {this.props.sensor.identification}</ControlLabel><br/>
           <ControlLabel>Description: {this.props.sensor.description}</ControlLabel><br/>
-          <ControlLabel>Lat/Long:    {this.props.sensor.latitude}, {this.props.sensor.longitude}</ControlLabel><br/>
+          <ControlLabel>Lat/Long: {this.props.sensor.latitude}, {this.props.sensor.longitude}</ControlLabel><br/>
         </Panel>
       </div>
     )
