@@ -6,6 +6,11 @@ module.exports = (io, model) => {
       sendRequestToAddToWhiteList(newSensor, socket);
     });
 
+    socket.on('sensorAccepted', (sensor) => {
+      console.log('sensor accepted');
+      console.log(sensor);
+    })
+
     // socket.on('updateSensor', (sensor) => {
     //   update(sensor);
     //   publishUpdate(socket);
@@ -18,10 +23,6 @@ module.exports = (io, model) => {
   });
 
   const sendRequestToAddToWhiteList = (newSensor, socket) => {
-    socket.emit('requestSensorValidation', (accepted) => {
-      if(accepted) {
-        model.addNewSensor(newSensor);
-      }
-    });
+    socket.emit('requestSensorValidation', newSensor);
   }
 }
