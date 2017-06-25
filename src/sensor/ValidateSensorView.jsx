@@ -20,28 +20,29 @@ class ValidateSensorView extends React.Component {
 
   componentDidMount() {
     this.props.socket.on('requestSensorValidation', (sensor) => {
-      this.setState({
-        sensorBeingPondered: sensor,
-        ifSensorIsNotBeingPondered: false
-      });
+      console.log('new sensor');
+      console.log(sensor);
+      this.setState({sensorBeingPondered: sensor, ifSensorIsNotBeingPondered: false});
     });
   }
 
   accept(event) {
     event.preventDefault();
     this.setState({ifSensorIsNotBeingPondered: true})
-    // todo
+    console.log('accepting sensor');
+    console.log(this.state.sensorBeingPondered);
   }
 
   decline(event) {
     event.preventDefault();
-    this.setState({ifSensorIsNotBeingPondered: true})
-    // todo
+    this.setState({sensorBeingPondered: {}, ifSensorIsNotBeingPondered: true})
+    console.log('sensor declined');
+    console.log(this.state.sensorBeingPondered);
   }
 
   render() {
     let sensorBeingPondered = [];
-    if(this.state.sensorBeingPondered) {
+    if (Object.keys(this.state.sensorBeingPondered).length > 0) {
       sensorBeingPondered = <SensorBeingPondered sensor={this.state.sensorBeingPondered}/>
     }
 
@@ -70,9 +71,9 @@ class SensorBeingPondered extends React.Component {
     return (
       <div>
         <Panel>
-          <ControlLabel>ID:          {this.props.sensor.identification}</ControlLabel>
+          <ControlLabel>ID: {this.props.sensor.identification}</ControlLabel>
           <ControlLabel>Description: {this.props.sensor.description}</ControlLabel>
-          <ControlLabel>Lat/Long:    {this.props.sensor.latitude}, {this.props.sensor.longitude}</ControlLabel>
+          <ControlLabel>Lat/Long: {this.props.sensor.latitude}, {this.props.sensor.longitude}</ControlLabel>
         </Panel>
       </div>
     )
