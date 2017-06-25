@@ -20,8 +20,6 @@ class ValidateSensorView extends React.Component {
 
   componentDidMount() {
     this.props.socket.on('requestSensorValidation', (sensor) => {
-      console.log('new sensor');
-      console.log(sensor);
       this.setState({sensorBeingPondered: sensor, ifSensorIsNotBeingPondered: false});
     });
   }

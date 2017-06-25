@@ -7,8 +7,7 @@ module.exports = (io, model) => {
     });
 
     socket.on('sensorAccepted', (sensor) => {
-      console.log('sensor accepted');
-      console.log(sensor);
+      model.addNewSensor(sensor);
     })
 
     // socket.on('updateSensor', (sensor) => {
