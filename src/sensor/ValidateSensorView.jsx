@@ -73,9 +73,9 @@ class SensorBeingPondered extends React.Component {
     return (
       <div>
         <Panel>
-          <ControlLabel>ID: {this.props.sensor.identification}</ControlLabel>
-          <ControlLabel>Description: {this.props.sensor.description}</ControlLabel>
-          <ControlLabel>Lat/Long: {this.props.sensor.latitude}, {this.props.sensor.longitude}</ControlLabel>
+          <ControlLabel>ID:          {this.props.sensor.identification}</ControlLabel><br/>
+          <ControlLabel>Description: {this.props.sensor.description}</ControlLabel><br/>
+          <ControlLabel>Lat/Long:    {this.props.sensor.latitude}, {this.props.sensor.longitude}</ControlLabel><br/>
         </Panel>
       </div>
     )
