@@ -32,7 +32,6 @@ class ComponentOrganizationView extends React.Component {
     });
 
     socket.on('sensorListUpdated', (sensors) => {
-      console.log('sensor list updated');
       this.setState({sensors: sensors});
     });
 
