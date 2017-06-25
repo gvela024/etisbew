@@ -42,8 +42,10 @@ class ValidateSensorView extends React.Component {
 
   render() {
     let sensorBeingPondered = [];
-    if (Object.keys(this.state.sensorBeingPondered).length > 0) {
-      sensorBeingPondered = <SensorBeingPondered sensor={this.state.sensorBeingPondered}/>
+    if (Object.keys(this.state.sensorBeingPondered).length === 0) {
+      sensorBeingPondered.splice(0, sensorBeingPondered.length - 1);
+    } else {
+      sensorBeingPondered.push(<SensorBeingPondered sensor={this.state.sensorBeingPondered}/>);
     }
 
     return (

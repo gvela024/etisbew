@@ -65,7 +65,7 @@ class ModifyView extends React.Component {
     if (Object.keys(this.state.loadedSensor).length === 0) {
       loadedSensor.splice(0, loadedSensor.length - 1);
     } else {
-      loadedSensor.push(<ModifySensor key={this.state.loadedSensor.identification} sensor={this.state.loadedSensor} saveSensor={this.saveSensor.bind(this)}/>)
+      loadedSensor.push(<ModifySensor key={this.state.loadedSensor.identification} sensor={this.state.loadedSensor} saveSensor={this.saveSensor.bind(this)}/>);
     }
 
     return (
